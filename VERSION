@@ -1,0 +1,90 @@
+VERSION 0.1.0:
+==============
+1- Read data from Princeton dataset
+
+
+
+
+
+REQUIREMENTS:
+=============
+
+* Variuos Detection Modes
+1- Color Only
+2- Depth only
+3- Color and Depth
+
+* Input Data from Public dataset
+
+* Occlusion Handling
+
+* Occlusion Detection
+1- Depth Histogram Two Peaks
+
+* Run Different Trackers Simultaneously & Assign Different Colors to Them
+
+* Target Initialization
+1- By Hand
+2- Text File
+3- Detector Algorithm
+
+* Background Supstraction
+1- Using GMM for FG & BG
+2- Using Temporal Median Background
+
+* Color Histogram
+1- Using K-Means & RGB Histogram
+2- Using Fixed Grid & RGB Histogram
+3- Using Fixed Grid & HSV Histogram
+4- Using GMM for Target
+
+* Distance Measures
+1- Point-to-Point Euclidean Distance
+2- Mahalanobis Distance
+3- Bhattacherya Dsitance
+4- KL Divergance
+
+* Depth Information
+1- Median of Depth
+2- Histogram of Depth
+3- Histogram of Oriented Depth (HOD)
+
+* Feature Detectors
+1- HOG
+2- SIFT
+3- SURF
+
+* Enable Train and Test Mode
+1- Train: Learning Confidence, Tuning Parameters, ...
+2- Test: Seeing The Results
+
+* Evaluation of Results
+1- CLEAR MOT: MOTA, MOTP
+2- PASCAL VOC: R, ...
+3- Object Center Placement Error
+4- Scale Error: SA
+
+
+
+
+TECHNICAL FEATURES:
+===================
+* Start Video from a Given Frame
+
+* Organized Source Code into Folders
+
+* Verbose Report
+
+* Saving Video of Results
+
+* Save Result Bounding Boxes in the File
+
+* Parameters of Tracker
+1- Number of Particles, ...
+
+* Visualization
+1- Input Data: Color Channel, Depth Channel, Point Cloud, ...
+2- Tracking History and Ground Truth: Type of Errors, Source of Errors, ...
+3- Particle Dynamics: Color Histogram, Local Features (e.g. iHOG), Depth Map, Confidence Map, Distance to Template, ...
+4- Tracker Dynamics: All Particles, Expected New target, Occlusion Suspects, Ground Truth, Background Update, Template Update, Probability Histogram of Particles (including probability of ground truth), ...
+
