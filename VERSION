@@ -38,10 +38,10 @@ REQUIREMENTS:
 3- Using Fixed Grid & HSV Histogram
 4- Using GMM for Target
 
-* Distance Measures
+* Distance Measures -> To be used in Gauusian 
 1- Point-to-Point Euclidean Distance
 2- Mahalanobis Distance
-3- Bhattacherya Dsitance
+3- Bhattacherya Distance
 4- KL Divergance
 
 * Depth Information
@@ -80,7 +80,10 @@ TECHNICAL FEATURES:
 * Save Result Bounding Boxes in the File
 
 * Parameters of Tracker
-1- Number of Particles, ...
+1- Number of Particles, Similarity Measure Gaussian Dist. Variance, 
+2- Run Each Tracker with its own set of parameters.
+
+* Stable Bounding Box Around The Target (Do not shake or jitter)
 
 * Visualization
 1- Input Data: Color Channel, Depth Channel, Point Cloud, ...
