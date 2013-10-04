@@ -24,7 +24,7 @@ function [vid_param, directory, num_frames, cam_param, ground_truth, init_bb] = 
        
     if exist([directory 'init.txt'],'file') == 2
         fid = fopen([directory 'init.txt']);
-        init_bb = fscanf(fid, '%g,%g,%g,%g');
+        init_bb = fscanf(fid, '%g,%g,%g,%g', [4,inf]);
         fclose(fid);
     else
         init_bb = [];

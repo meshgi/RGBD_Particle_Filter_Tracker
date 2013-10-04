@@ -1,3 +1,38 @@
+VERSION 0.2.0:
+==============
+1- General Framework Planning:
+
+* General Settings
+* Training
+*** For Each Video Do
+****** Read Video General Info
+****** Initialize Trackers for Training Mode
+****** For Each Frame of Video Do
+********* For Each Tracker Do
+************ Provide Tracker with Input Data and Ground Truth
+****** Returning & Saving the Trained Parameters of Tracker / If No Video is Provided Load Default Values
+* Testing
+*** For Each Video Do
+****** Read Video General Info
+****** Initialize Trackers for Testing Mode: with Trained Parameters, Hand Tuned Parameters (Same Algorithm with Different Set of Parameters),
+****** For Each Frame of Video Do
+********* For Each Tracker Do
+************ Provide Tracker with Input Data
+************ Save the Result of Tracking
+*** Returning The Result for Each Video
+* Evaluations
+*** For Each Video Do
+****** For Each Tracker Do
+********* Calculate the Evaluation Metrics
+****** Draw Result Table
+* Output Generation
+*** Save Overall Tracking Video
+*** Save Tracker Result Files
+
+
+
+
+
 VERSION 0.1.0:
 ==============
 1- Read data from Princeton dataset
@@ -89,5 +124,5 @@ TECHNICAL FEATURES:
 1- Input Data: Color Channel, Depth Channel, Point Cloud, ...
 2- Tracking History and Ground Truth: Type of Errors, Source of Errors, ...
 3- Particle Dynamics: Color Histogram, Local Features (e.g. iHOG), Depth Map, Confidence Map, Distance to Template, ...
-4- Tracker Dynamics: All Particles, Expected New target, Occlusion Suspects, Ground Truth, Background Update, Template Update, Probability Histogram of Particles (including probability of ground truth), ...
+4- Tracker Dynamics: All Particles, Expected New Target, Occlusion Suspects, Ground Truth, Background Update, Template Update, Probability Histogram of Particles (including probability of ground truth), ...
 
