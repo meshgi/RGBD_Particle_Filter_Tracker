@@ -18,23 +18,78 @@ function results  =  trackers_test ( test_videos , trackers , control )
 %   code by: Kourosh Meshgi, Oct 2013
 %   https://github.com/meshgi/RGBD_Particle_Filter_Tracker
 
-results = [];
+    results = [];
 
-for vid = 1:size(test_videos,2)
-    [vid_param, directory, num_frames, cam_param, gt, init_bb]   = video_info(test_videos{1,vid});
-    
-    % if initialization method is not 'file' then initialize it!!!!
-    
-    for fr = 1:num_frames
-        [rgb, depth] =  read_frame(vid_param, directory, fr);
-        
-        for tr = 1:length(trackers)
-            % give tracker input data, without ground truth and save the
-            % results
+    for vid = 1:size(test_videos,2)
+        [vid_param, directory, num_frames, cam_param, grt, init_bb]   = video_info(test_videos{1,vid});
+
+        % if initialization method is not 'file' then initialize it!!!!
+
+        for fr = 1:num_frames
+            [rgb, depth] =  read_frame(vid_param, directory, fr);
+
+            for tr = 1:length(trackers)
+                % give tracker input data, without ground truth and save the
+                % results
+                initial_target_bb = [];
+                if (fr == 1)
+                    initial_target_bb = init_bb;
+                end
+
+                trackers{1,tr}.status = 'test';
+                switch trackers{1,tr}.type
+                    case 'rgb_pf'
+                        disp '1'
+                    case 'rgbd_pf'
+                        disp '2'
+                    case 'rgbd_pf_grid'
+                        disp '3'
+                    case 'rgbd_pf_grid_occ'
+                        disp '4'
+                        % e.g. the object to track in the multiple object cases
+                    case 'ub_gt'
+                        res = ub_gt_test (grt,fr,initial_target_bb);
+                    case 'ub_gt_first_size'
+                        disp '5'
+                    case 'ub_gt_best_size'
+                        disp '6'
+                    case 'ub_gt_first_ratio'
+                        disp '7'
+                    case 'ub_gt_best_ratio'
+                        disp '8'
+                    case 'ub_gt_no_occ'
+                        disp '9'
+                    case 'lb_first_bb'
+                        disp '10'
+                    case 'lb_center_bb'
+                        [res,trackers{1,tr}] = lb_center_bb_test ( rgb, depth, initial_target_bb, grt, trackers{1,tr} );
+                    case 'lb_rand_size'
+                        [res,trackers{1,tr}] = lb_rand_size_test ( rgb, depth, initial_target_bb, grt, trackers{1,tr} );
+                    case 'lb_rand_loc'
+                        [res,trackers{1,tr}] = lb_rand_loc_test ( rgb, depth, initial_target_bb, grt, trackers{1,tr} );
+                    case 'lb_rand_size_loc'
+                        [res,trackers{1,tr}] = lb_rand_size_loc_test (rgb, depth, initial_target_bb, grt, trackers{1,tr});
+                    case 'lb_crazy'   
+                        res = lb_crazy_test (rgb, depth, initial_target_bb);
+                end
+                tracker_output(tr,1:4,fr) = res(:);
+            end
+            tracker_output(1:4,1:4,fr)
             
-        
+            imshow(rgb);
+            rectangle('Position',tracker_output(1,1:4,fr),'EdgeColor','r');
+            rectangle('Position',tracker_output(2,1:4,fr),'EdgeColor','g');
+            rectangle('Position',tracker_output(3,1:4,fr),'EdgeColor','b');
+            rectangle('Position',tracker_output(4,1:4,fr),'EdgeColor','y');
+            pause(0.1)
+            drawnow;
         end
+    video_tracking_footage(vid,:,:,:) = tracker_output;
+    
+    
     end
+    
+results = video_tracking_footage;
 end %======================================================================
 
 

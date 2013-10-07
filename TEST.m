@@ -25,11 +25,11 @@ control.train_videos = {'bear_front' , 'child_no1', 'face_occ5', 'zcup_move_1'};
 control.test_videos = {'new_ex_occ4'};
 
 %% Tracker Initialization parameters
-control.tracker_list = {'lb_crazy', 'lb_crazy', 'lb_crazy', 'lb_crazy'};
-params1.name = 'crazy1';
-params2.name = 'crazy2';
-params3.name = 'crazy3';
-params4.name = 'crazy4';
+control.tracker_list = {'lb_center_bb', 'lb_rand_size_loc', 'ub_gt', 'lb_rand_loc'};
+params1.name = 'lb_center_bb';
+params2.name = 'rand_size_loc';
+params3.name = 'ground_t';
+params4.name = 'rand_loc';
 tracker_parameters = [params1, params2, params3, params4];
 
 %% Tracking Scenario
