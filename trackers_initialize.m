@@ -37,17 +37,19 @@ function [trackers] =  trackers_initialize ( tracker_list, tracker_parameters , 
             case 'ub_gt'
                 x = ub_gt_init (tracker_parameters(tr));
             case 'ub_gt_first_size'
-                disp '5'
+                x = ub_gt_first_size_init (tracker_parameters(tr));
             case 'ub_gt_best_size'
                 disp '6'
             case 'ub_gt_first_ratio'
-                disp '7'
+                x = ub_gt_first_ratio_init (tracker_parameters(tr));
             case 'ub_gt_best_ratio'
                 disp '8'
-            case 'ub_gt_no_occ'
-                disp '9'
+            case 'ub_gt_no_occ_rand'
+                x = ub_gt_no_occ_rand_init (tracker_parameters(tr));
+            case 'ub_gt_no_occ_last'
+                x = ub_gt_no_occ_last_init (tracker_parameters(tr));
             case 'lb_first_bb'
-                disp '10'
+                x = lb_first_bb_init (tracker_parameters(tr));
             case 'lb_center_bb'
                 x = lb_center_bb_init (tracker_parameters(tr));
             case 'lb_rand_size'

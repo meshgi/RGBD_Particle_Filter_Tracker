@@ -50,17 +50,19 @@ function results  =  trackers_test ( test_videos , trackers , control )
                     case 'ub_gt'
                         res = ub_gt_test (grt,fr,initial_target_bb);
                     case 'ub_gt_first_size'
-                        disp '5'
+                        [res,trackers{1,tr}] = ub_gt_first_size_test (grt,fr,initial_target_bb, trackers{1,tr});
                     case 'ub_gt_best_size'
                         disp '6'
                     case 'ub_gt_first_ratio'
-                        disp '7'
+                        [res,trackers{1,tr}] = ub_gt_first_ratio_test (depth,grt,fr,initial_target_bb, trackers{1,tr});
                     case 'ub_gt_best_ratio'
                         disp '8'
-                    case 'ub_gt_no_occ'
-                        disp '9'
+                    case 'ub_gt_no_occ_rand'
+                        res = ub_gt_no_occ_rand_test (depth,grt,fr,initial_target_bb);
+                    case 'ub_gt_no_occ_last'
+                        res = ub_gt_no_occ_last_test (grt,fr,initial_target_bb);
                     case 'lb_first_bb'
-                        disp '10'
+                        [res,trackers{1,tr}] = lb_first_bb_test ( rgb, depth, initial_target_bb, grt, trackers{1,tr} );
                     case 'lb_center_bb'
                         [res,trackers{1,tr}] = lb_center_bb_test ( rgb, depth, initial_target_bb, grt, trackers{1,tr} );
                     case 'lb_rand_size'
@@ -74,13 +76,13 @@ function results  =  trackers_test ( test_videos , trackers , control )
                 end
                 tracker_output(tr,1:4,fr) = res(:);
             end
-            tracker_output(1:4,1:4,fr)
+            tracker_output(1:4,1:4,fr) %%%%%%%%%% PRINT OUT
             
             imshow(rgb);
-            rectangle('Position',tracker_output(1,1:4,fr),'EdgeColor','r');
-            rectangle('Position',tracker_output(2,1:4,fr),'EdgeColor','g');
-            rectangle('Position',tracker_output(3,1:4,fr),'EdgeColor','b');
-            rectangle('Position',tracker_output(4,1:4,fr),'EdgeColor','y');
+            if ~isnan(tracker_output(1,1:4,fr)), rectangle('Position',tracker_output(1,1:4,fr),'EdgeColor','r'); end
+            if ~isnan(tracker_output(2,1:4,fr)), rectangle('Position',tracker_output(2,1:4,fr),'EdgeColor','g'); end;
+            if ~isnan(tracker_output(3,1:4,fr)), rectangle('Position',tracker_output(3,1:4,fr),'EdgeColor','b'); end;
+            if ~isnan(tracker_output(4,1:4,fr)), rectangle('Position',tracker_output(4,1:4,fr),'EdgeColor','y'); end;
             pause(0.1)
             drawnow;
         end
