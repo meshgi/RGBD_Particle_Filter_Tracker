@@ -1,3 +1,10 @@
+Version 0.4.0:
+==============
+
+Version 0.3.0:
+==============
+1- Naive trackers (lower bound and upper bound trackers)
+
 VERSION 0.2.0:
 ==============
 1- General Framework Planning:
@@ -29,10 +36,6 @@ VERSION 0.2.0:
 *** Save Overall Tracking Video
 *** Save Tracker Result Files
 
-
-
-
-
 VERSION 0.1.0:
 ==============
 1- Read data from Princeton dataset
@@ -52,9 +55,14 @@ REQUIREMENTS:
 * Input Data from Public dataset
 
 * Occlusion Handling
+1- Princeton 
 
 * Occlusion Detection
-1- Depth Histogram Two Peaks
+1- Based on D
+	1-1- Depth Histogram Two Peaks
+2- Based on RGB
+3- Based on Trackers Information Exchange
+4- Track Occluder
 
 * Run Different Trackers Simultaneously & Assign Different Colors to Them
 
@@ -63,41 +71,88 @@ REQUIREMENTS:
 2- Text File
 3- Detector Algorithm
 
-* Background Supstraction
-1- Using GMM for FG & BG
-2- Using Temporal Median Background
+* Pre-processing
+1- Background Subtraction
+	1-1- Using GMM for FG & BG
+	1-2- Using Temporal Median Background
+2- Shadow Removal
+3- Illumination Normalization
+4- Blurring of Depth Map
 
-* Color Histogram
-1- Using K-Means & RGB Histogram
-2- Using Fixed Grid & RGB Histogram
-3- Using Fixed Grid & HSV Histogram
-4- Using GMM for Target
+* 2D Features
+1- Color Feature -> Histogram of Colors
+	1-1- Using K-Means & RGB Histogram
+	1-2- Using Fixed Grid & RGB Histogram
+	1-3- Using Fixed Grid & HSV Histogram
+	1-4- Using GMM for Target
+2- Advanced Feature
+	2-1- HOG
+	2-2- SIFT
+	2-3- PCA-SIFT
+	2-4- Edge Orientation Histogram
+	2-5- Shape Contexts
+	2-6- Haar Wavelet
+	2-7- R-HOG
+	2-8- C-HOG
+	2-9- R2-HOG
+	2-10- E-ShapeC
+	2-11- G-ShapeC
+	2-12- SURF
+3- Textural Features
+4- Segmentation
+	4-1- Color Clusters Adjacency Graph
 
-* Distance Measures -> To be used in Gauusian 
+* 3D Features
+1- Histogram of Colors in Color Namespace
+2- Points Count in the Cell
+3- 3D Shape Feature
+	3-1- Scatterness
+	3-2- Linearness
+	3-3- Surfaceness
+
+* Depth Features
+1- Median of Depth
+2- Histogram of Depth
+3- Histogram of Oriented Depth (HOD)
+
+* Motion Features
+1- Optical Flow
+2- Mihaylon Paper
+
+* Distance Measures -> To be used in Gaussian 
 1- Point-to-Point Euclidean Distance
 2- Mahalanobis Distance
 3- Bhattacherya Distance
 4- KL Divergance
 
-* Depth Information
-1- Median of Depth
-2- Histogram of Depth
-3- Histogram of Oriented Depth (HOD)
-
-* Feature Detectors
-1- HOG
-2- SIFT
-3- SURF
-
 * Enable Train and Test Mode
 1- Train: Learning Confidence, Tuning Parameters, ...
 2- Test: Seeing The Results
 
+* Enable Online Learning
+1- Target Model
+	1-1- Supervised Learning -> N-P Learning
+	1-2- Statistically -> Weighted Mean Sliding Window
+2- Occlusion Cases
+3- State Transition Model
+4- Confidence Map
+5- Background
+
+* Switching Between RGB and D Channels
+1- Different Confidence Measures
+2- Linear Sum of RGB and D -> Adaptive Weights
+3- Using Occlusion detection
+
 * Evaluation of Results
 1- CLEAR MOT: MOTA, MOTP
 2- PASCAL VOC: R, ...
-3- Object Center Placement Error
+3- Object Center Position Error(CPE)
 4- Scale Error: SA
+
+* Evaluation Curves:
+1- ROC
+2- DET: error-tradeoff log-log sclae (miss rate vs. false positive)
+3- Average Success rate vs. Threshold of Overlap ratio (r_t)
 
 
 
@@ -124,5 +179,6 @@ TECHNICAL FEATURES:
 1- Input Data: Color Channel, Depth Channel, Point Cloud, ...
 2- Tracking History and Ground Truth: Type of Errors, Source of Errors, ...
 3- Particle Dynamics: Color Histogram, Local Features (e.g. iHOG), Depth Map, Confidence Map, Distance to Template, ...
-4- Tracker Dynamics: All Particles, Expected New Target, Occlusion Suspects, Ground Truth, Background Update, Template Update, Probability Histogram of Particles (including probability of ground truth), ...
-
+4- Tracker Dynamics: All Particles, Expected New Target, Occlusion Suspects, Ground Truth, Background Update, Template Update, Probability Histogram of Particles (including probability of ground truth), Learnt Smaples, ...
+5- All Objects Silhouette Image
+6- Stabilized Picture
