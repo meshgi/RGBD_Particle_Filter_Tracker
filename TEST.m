@@ -20,17 +20,25 @@ control.verbose = true;
 
 control.number_of_objects = 1;
 control.initialize_input_method = 'file';  %file,hand,detector
+control.start_frame = 1;
 
 control.train_videos = {'bear_front' , 'child_no1', 'face_occ5', 'zcup_move_1'};
 control.test_videos = {'new_ex_occ4'};
 
 %% Tracker Initialization parameters
-control.tracker_list = {'ub_gt_first_ratio', 'ub_gt_first_ratio', 'ub_gt_first_ratio', 'ub_gt_first_ratio'};
+control.tracker_list = {'ub_gt_first_ratio', 'ub_gt_first_ratio', 'ub_gt_first_ratio', 'particle_filter'};
 params1.name = '1';
 params2.name = '2';
 params3.name = '3';
-params4.name = '4';
-tracker_parameters = [params1, params2, params3, params4];
+
+params4.name = 'particle filter';
+params4.number_of_particles = 100;
+params4.feature_name        = {'Histogram of Colors', 'Median of Depth'};
+params4.similarity_measure  = {'Euclidean'          , 'Euclidean'};
+params4.variance_from_target= [100                  , 5];
+params4.occlusion_flag_th   = 0.3;
+
+tracker_parameters = {params1, params2, params3, params4};
 
 %% Tracking Scenario
 trackers =  trackers_initialize ( control.tracker_list, tracker_parameters , control );

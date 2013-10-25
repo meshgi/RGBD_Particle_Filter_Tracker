@@ -25,7 +25,7 @@ function results  =  trackers_test ( test_videos , trackers , control )
 
         % if initialization method is not 'file' then initialize it!!!!
 
-        for fr = 1:num_frames
+        for fr = control.start_frame:num_frames
             [rgb, depth] =  read_frame(vid_param, directory, fr);
 
             for tr = 1:length(trackers)
@@ -38,12 +38,8 @@ function results  =  trackers_test ( test_videos , trackers , control )
 
                 trackers{1,tr}.status = 'test';
                 switch trackers{1,tr}.type
-                    case 'rgb_pf'
-                        disp '1'
-                    case 'rgbd_pf'
-                        disp '2'
-                    case 'rgbd_pf_grid'
-                        disp '3'
+                    case 'particle_filter'
+                        [res,trackers{1,tr}] = particle_filter_test ( rgb, depth, initial_target_bb, trackers{1,tr});
                     case 'rgbd_pf_grid_occ'
                         disp '4'
                         % e.g. the object to track in the multiple object cases

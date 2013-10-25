@@ -25,41 +25,37 @@ function [trackers] =  trackers_initialize ( tracker_list, tracker_parameters , 
         x = [];
         x.status = 'init';
         switch tracker_list{1,tr}
-            case 'rgb_pf'
-                disp '1'
-            case 'rgbd_pf'
-                disp '2'
-            case 'rgbd_pf_grid'
-                disp '3'
+            case 'particle_filter'
+                x = particle_filter_init (tracker_parameters{1,tr});
             case 'rgbd_pf_grid_occ'
                 disp '4'
                 % e.g. the object to track in the multiple object cases
             case 'ub_gt'
-                x = ub_gt_init (tracker_parameters(tr));
+                x = ub_gt_init (tracker_parameters{1,tr});
             case 'ub_gt_first_size'
-                x = ub_gt_first_size_init (tracker_parameters(tr));
+                x = ub_gt_first_size_init (tracker_parameters{1,tr});
             case 'ub_gt_best_size'
                 disp '6'
             case 'ub_gt_first_ratio'
-                x = ub_gt_first_ratio_init (tracker_parameters(tr));
+                x = ub_gt_first_ratio_init (tracker_parameters{1,tr});
             case 'ub_gt_best_ratio'
                 disp '8'
             case 'ub_gt_no_occ_rand'
-                x = ub_gt_no_occ_rand_init (tracker_parameters(tr));
+                x = ub_gt_no_occ_rand_init (tracker_parameters{1,tr});
             case 'ub_gt_no_occ_last'
-                x = ub_gt_no_occ_last_init (tracker_parameters(tr));
+                x = ub_gt_no_occ_last_init (tracker_parameters{1,tr});
             case 'lb_first_bb'
-                x = lb_first_bb_init (tracker_parameters(tr));
+                x = lb_first_bb_init (tracker_parameters{1,tr});
             case 'lb_center_bb'
-                x = lb_center_bb_init (tracker_parameters(tr));
+                x = lb_center_bb_init (tracker_parameters{1,tr});
             case 'lb_rand_size'
-                x = lb_rand_size_init (tracker_parameters(tr));
+                x = lb_rand_size_init (tracker_parameters{1,tr});
             case 'lb_rand_loc'
-                x = lb_rand_loc_init (tracker_parameters(tr));
+                x = lb_rand_loc_init (tracker_parameters{1,tr});
             case 'lb_rand_size_loc'
-                x = lb_rand_size_loc_init (tracker_parameters(tr));
+                x = lb_rand_size_loc_init (tracker_parameters{1,tr});
             case 'lb_crazy'
-                x = lb_crazy_init (tracker_parameters(tr));
+                x = lb_crazy_init (tracker_parameters{1,tr});
         end
         trackers{tr} = x;
         disp (x.name);
