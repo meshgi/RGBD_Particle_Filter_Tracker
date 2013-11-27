@@ -1,0 +1,149 @@
+REQUIREMENTS:
+=============
+
+* Various Detection Modes
+1- Color Only
+2- Depth Only
+3- Color and Depth
+
+* Input Data from Public dataset
+
+* Occlusion Handling
+1- Princeton 
+
+* Occlusion Detection
+1- Based on D
+	1-1- Bimodal Histogram of Depth
+	1-2- Variance of Gaussian Fit on HoD is Greater than a Threshold
+2- Based on RGB
+3- Based on Trackers Information Exchange
+4- Track Occluder -> Create another Tracker with Shared Memory
+5- Detect Partial Caption
+
+* Run Different Trackers Simultaneously & Assign Different Colors to Them
+
+* Target Initialization
+1- By Hand
+2- Text File
+3- Detector Algorithm
+
+* Pre-processing
+1- Background Subtraction
+	1-1- Using GMM for FG & BG
+	1-2- Using Temporal Median Background
+2- Shadow Removal
+3- Illumination Normalization
+4- Blurring of Depth Map
+
+* 2D Features
+1- Color Feature -> Histogram of Colors
+	1-1- Using K-Means & RGB Histogram
+	1-2- Using Fixed Grid & RGB Histogram
+	1-3- Using Fixed Grid & HSV Histogram
+	1-4- Using GMM for Target
+2- Advanced Feature
+	2-1- HOG
+	2-2- SIFT
+	2-3- PCA-SIFT
+	2-4- Edge Orientation Histogram
+	2-5- Shape Contexts
+	2-6- Haar Wavelet
+	2-7- R-HOG
+	2-8- C-HOG
+	2-9- R2-HOG
+	2-10- E-ShapeC
+	2-11- G-ShapeC
+	2-12- SURF
+	2-13- Integral Histogram
+	2-14- Spatiogram
+3- Textural Features
+4- Segmentation
+	4-1- Color Clusters Adjacency Graph
+
+* 3D Features
+1- Histogram of Colors in Color Namespace
+2- Points Count in the Cell
+3- 3D Shape Feature
+	3-1- Scatterness
+	3-2- Linearness
+	3-3- Surfaceness
+
+* Depth Features
+1- Median of Depth
+2- Histogram of Depth
+3- Histogram of Oriented Depth (HOD)
+
+* Motion Features
+1- Optical Flow
+2- Mihaylon Paper
+3- Inertial System -> Keep track of move pattern and predict next move -> Add Velocity to Particles (Vx,Vy,Vz) -> Kalman filter?
+
+* Distance Measures -> To be used in Gaussian 
+1- Point-to-Point Euclidean Distance
+2- Mahalanobis Distance
+3- Bhattacherya Distance
+4- KL Divergance
+
+* Enable Train and Test Mode
+1- Train: Learning Confidence, Tuning Parameters, Learning Weights of Different features on Current dataset, ...
+2- Test: Seeing The Results
+
+* Enable Online Learning
+1- Target Model
+	1-1- Supervised Learning -> N-P Learning
+	1-2- Statistically -> Weighted Mean Sliding Window
+2- Occlusion Cases
+3- State Transition Model
+4- Confidence Map
+5- Background
+
+* Switching Between RGB and D Channels
+1- Different Confidence Measures: Feature Confidence, RGB Confidence, D Confidence
+2- Linear Sum of RGB and D -> Adaptive Weights
+3- Using Occlusion detection
+
+* Evaluation of Results
+1- CLEAR MOT: MOTA, MOTP
+2- PASCAL VOC: R, ...
+3- Object Center Position Error(CPE)
+4- Scale Error: SA
+
+* Evaluation Curves:
+1- ROC
+2- DET: error-tradeoff log-log sclae (miss rate vs. false positive)
+3- Average Success rate vs. Threshold of Overlap ratio (r_t)
+
+
+
+
+TECHNICAL FEATURES:
+===================
+* Start Video from a Given Frame
+
+* Dataset Annotation Ability
+
+* Organized Source Code into Folders
+
+* Verbose Report
+
+* Saving Video of Results
+
+* Save Result Bounding Boxes in the File
+
+* Parameters of Tracker
+1- Number of Particles, Features, Similarity Measures, Gaussian Variance, Occlusion Flag Threshold, ...
+2- Run Each Tracker with its own set of parameters.
+
+* Stable Bounding Box Around The Target (Do not shake or jitter)
+
+* Visualization
+1- Input Data: Color Channel, Depth Channel, Point Cloud, ...
+2- Tracking History and Ground Truth: Type of Errors, Source of Errors, Target (x,y) vs Ground Truth Scatter Plot and Error bar, The same for (w,h), Video Event Annotation, Video Occlusion State, ...
+3- Particle Dynamics: Color Histogram, Local Features (e.g. iHOG), Depth Map, Confidence Map, Distance to Template, ...
+4- Tracker Dynamics: All Particles, Expected New Target, Occlusion Suspects, Ground Truth, Background Update, Template Update, Probability Histogram of Particles (including probability of ground truth), Learnt Smaples, ...
+5- All Objects Silhouette Image
+6- Stabilized Picture
+7- Error vs Time for All Trackers -> e.g. CPE vs time
+
+* Data Exchange Between trackers -> Shared Memory pool
+

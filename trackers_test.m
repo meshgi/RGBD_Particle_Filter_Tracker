@@ -1,5 +1,5 @@
 function results  =  trackers_test ( test_videos , trackers , control )
-%TRACKER_TEST Test trackers wether they can track the given object
+%TRACKERS_TEST Test trackers wether they can track the given object
 %   This function tests the trackers using given video. It provides them
 %   the bounding box in first frame either given on file, via an
 %   interactive tool, or using object detector as an input. 

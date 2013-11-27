@@ -3,7 +3,7 @@ function [bb, self] = particle_filter_test (rgb, depth, init_bb , self)
 %using selected features
 %   ---------------description
 %
-%   code by: Kourosh Meshgi, Oct 2013
+%   code by: Kourosh Meshgi, Nov 2013
 %   https://github.com/meshgi/RGBD_Particle_Filter_Tracker
 
     if ( ~isempty(init_bb))

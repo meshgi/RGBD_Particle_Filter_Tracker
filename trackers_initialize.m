@@ -1,5 +1,5 @@
 function [trackers] =  trackers_initialize ( tracker_list, tracker_parameters , control )
-%TRACKER_INITIALIZE Initialize Trackers of given types with given
+%TRACKERS_INITIALIZE Initialize Trackers of given types with given
 %parameters
 %   This function initialize multiple trackers to work on the same training
 %   and test set. Types of trackers are included in tracker_list which could

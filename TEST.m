@@ -21,30 +21,45 @@ control.verbose = true;
 control.number_of_objects = 1;
 control.initialize_input_method = 'file';  %file,hand,detector
 control.start_frame = 1;
+control.success_plot_thresold_steps = 20;
 
 control.train_videos = {'bear_front' , 'child_no1', 'face_occ5', 'zcup_move_1'};
 control.test_videos = {'new_ex_occ4'};
 
 %% Tracker Initialization parameters
-control.tracker_list = {'ub_gt_first_ratio', 'ub_gt_first_ratio', 'ub_gt_first_ratio', 'particle_filter'};
-params1.name = '1';
-params2.name = '2';
-params3.name = '3';
+% 'particle_filter'
+% 'ub_gt'
+% 'ub_gt_first_size'
+% 'ub_gt_first_ratio'
+% 'ub_gt_no_occ_rand'
+% 'ub_gt_no_occ_last'
+% 'lb_first_bb'
+% 'lb_center_bb'
+% 'lb_rand_size'
+% 'lb_rand_loc'
+% 'lb_rand_size_loc'
+% 'lb_crazy'   
+
+control.tracker_list = {'lb_crazy', 'ub_gt_first_size', 'lb_rand_size', 'particle_filter'};
+params1.name = 'alg 1';
+params2.name = 'alg 2';
+params3.name = 'alg 3';
 
 params4.name = 'particle filter';
 params4.number_of_particles = 100;
-params4.feature_name        = {'Histogram of Colors', 'Median of Depth'};
+params4.feature_name        = {'HoC(RGB Clustering)', 'HoD'}; %HoC (RGB Clustering,Grid2) , HoC (RGB Clustering,Grid3), HoC (HSV),...
 params4.similarity_measure  = {'Euclidean'          , 'Euclidean'};
 params4.variance_from_target= [100                  , 5];
 params4.occlusion_flag_th   = 0.3;
+params4.bkg_detection = 'temporal median';
 
 tracker_parameters = {params1, params2, params3, params4};
 
 %% Tracking Scenario
-trackers =  trackers_initialize ( control.tracker_list, tracker_parameters , control );
-trackers =  trackers_train ( control.train_videos , trackers , control );
-results  =  trackers_test ( control.test_videos , trackers , control );
-%             trackers_evaluate ( control.test_videos , trackers , control , results );
+trackers    =  trackers_initialize ( control.tracker_list, tracker_parameters , control );
+trackers    =  trackers_train ( control.train_videos , trackers , control );
+results     =  trackers_test ( control.test_videos , trackers , control );
+evaluation  =  trackers_evaluate ( control.test_videos , trackers , control , results );
 %             trackers_output ( control.test_videos , trackers , control , results );
 
 
