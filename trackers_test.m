@@ -39,7 +39,7 @@ function results  =  trackers_test ( test_videos , trackers , control )
                 trackers{1,tr}.status = 'test';
                 switch trackers{1,tr}.type
                     case 'particle_filter'
-                        [res,trackers{1,tr}] = particle_filter_test ( rgb, depth, initial_target_bb, trackers{1,tr});
+                        [res,trackers{1,tr}] = particle_filter_test ( rgb, depth, initial_target_bb, trackers{1,tr}, test_videos{1,vid});
                     case 'rgbd_pf_grid_occ'
                         disp '4'
                         % e.g. the object to track in the multiple object cases
@@ -69,6 +69,8 @@ function results  =  trackers_test ( test_videos , trackers , control )
                         [res,trackers{1,tr}] = lb_rand_size_loc_test (rgb, depth, initial_target_bb, grt, trackers{1,tr});
                     case 'lb_crazy'   
                         res = lb_crazy_test (rgb, depth, initial_target_bb);
+                    case 'lb_invisible'
+                        res = lb_invisible_test (rgb, depth, initial_target_bb);
                 end
                 tracker_output(tr,1:4,fr) = res(:);
             end

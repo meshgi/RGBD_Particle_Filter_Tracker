@@ -104,15 +104,17 @@ REQUIREMENTS:
 
 * Evaluation of Results
 1- CLEAR MOT: MOTA, MOTP
-2- PASCAL VOC: R, ...
-3- Object Center Position Error(CPE)
-4- Scale Error: SA
+2- PASCAL VOC: Area Under Curve of Success Plot, Error Type Analysis (localization error, missing object, false positive, identity loss/change)
+3- Average Object Center Position Error(CPE)
+4- Scale Error: Averagr Scale Adaptation(SA)
 
 * Evaluation Curves:
 1- ROC
 2- DET: error-tradeoff log-log sclae (miss rate vs. false positive)
-3- Average Success rate vs. Threshold of Overlap ratio (r_t)
-
+3- Success Plot (Success vs. Overlapping Threshold)
+4- Percision Plot (CPE vs Time)
+5- Robustness Evaluation: One-Pass Eval(OPE), Temporal Robustness Eval(TRE), Spatial Robustness Eval (SRE)
+6- SA vs. Time
 
 
 
@@ -143,7 +145,7 @@ TECHNICAL FEATURES:
 4- Tracker Dynamics: All Particles, Expected New Target, Occlusion Suspects, Ground Truth, Background Update, Template Update, Probability Histogram of Particles (including probability of ground truth), Learnt Smaples, ...
 5- All Objects Silhouette Image
 6- Stabilized Picture
-7- Error vs Time for All Trackers -> e.g. CPE vs time
+7- Error vs Time for All Trackers -> e.g. CPE vs time, ...
 
 * Data Exchange Between trackers -> Shared Memory pool
 

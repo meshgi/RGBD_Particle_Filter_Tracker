@@ -39,8 +39,9 @@ control.test_videos = {'new_ex_occ4'};
 % 'lb_rand_loc'
 % 'lb_rand_size_loc'
 % 'lb_crazy'   
+% 'lb_invisible'
 
-control.tracker_list = {'lb_crazy', 'ub_gt_first_size', 'lb_rand_size', 'particle_filter'};
+control.tracker_list = {'lb_crazy', 'ub_gt_first_size', 'lb_rand_loc', 'particle_filter'};
 params1.name = 'alg 1';
 params2.name = 'alg 2';
 params3.name = 'alg 3';
@@ -52,6 +53,7 @@ params4.similarity_measure  = {'Euclidean'          , 'Euclidean'};
 params4.variance_from_target= [100                  , 5];
 params4.occlusion_flag_th   = 0.3;
 params4.bkg_detection = 'temporal median';
+params4.bkg_subtraction = 'thresholding';
 
 tracker_parameters = {params1, params2, params3, params4};
 

@@ -56,6 +56,8 @@ function [trackers] =  trackers_initialize ( tracker_list, tracker_parameters , 
                 x = lb_rand_size_loc_init (tracker_parameters{1,tr});
             case 'lb_crazy'
                 x = lb_crazy_init (tracker_parameters{1,tr});
+            case 'lb_invisible'
+                x = lb_invisible_init (tracker_parameters{1,tr});
         end
         trackers{tr} = x;
         disp (x.name);

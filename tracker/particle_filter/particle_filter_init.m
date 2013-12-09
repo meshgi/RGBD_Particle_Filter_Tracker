@@ -11,14 +11,18 @@ x.vt        = params.variance_from_target;
 x.occ_th    = params.occlusion_flag_th;
 x.last      = NaN(1,4);
 x.bkg_det   = params.bkg_detection;
+x.bkg_sub   = params.bkg_subtraction;
+
+if ( isfield(params,'grid_size') ) x.g = params.grid_size; else x.g = 1; end
 
 %% Default Parameters
 x.bkg_det_samples       = 30;                                               % frames sampled for background subtraction 
-x.bkg_det_load = 0;
+x.bkg_det_load = 1;
 
 % HoC RGB Clustering
 x.rgb_clustering_samples = 3000;
 x.rgb_bins = 40;                                                            % number of bins in RGB
+x.rgb_bins_load = 1;
 
 % particle dynamics
 x.box_w_range = [50, 150];

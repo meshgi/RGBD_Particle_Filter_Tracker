@@ -23,9 +23,17 @@ function eval  =  trackers_evaluate ( test_videos , trackers , control , results
     %   number of frames of each video and T is the number of trackers. In the 
     %   case of multiple videos, the result will be N-by-T-by-4-by-M array,
     %   where N is the number of videos.
-
+    
+    cpe = evaluate_center_position_error (test_videos , trackers , control , results , ground_truth);
+    
     [ auc_list, success_plots ] = evaluate_success_plot_OPE (test_videos , trackers , control , results , ground_truth);
+    
+    sa = evaluate_scale_adaptation (test_videos , trackers , control , results , ground_truth);
+    
 
     eval = [];
-
+    
+%     disp(auc_list);
+%     disp(sa);
+    
 end
