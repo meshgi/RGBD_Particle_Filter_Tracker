@@ -3,7 +3,7 @@ function cpe_plot = draw_cpe_plot (plot_title, mismatch, trackers, no_occlusion_
     cpe_plot = figure;
     hold on;
 
-    colors = {'r','g','b','c','m','y','k','r--','g--','b--','c--','m--','y--','k--'};
+    colors = {'r','g','b','y','m','c','k','r--','g--','b--','c--','m--','y--','k--'};
     
     X = 1:length(no_occlusion_marks);
     maxY = 0;

@@ -1,5 +1,5 @@
 function bb = ub_gt_test (grt,frame_number,init_bb)
-%UB_GT+_TEST Outputs ground truth as an upper bound
+%UB_GT_TEST Outputs ground truth as an upper bound
 %   This function outputs ground truth in each frame, if the object is
 %   occluded (GT = NaN) it outputs NaN
 %

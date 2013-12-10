@@ -43,6 +43,8 @@ function results  =  trackers_test ( test_videos , trackers , control )
                     case 'rgbd_pf_grid_occ'
                         disp '4'
                         % e.g. the object to track in the multiple object cases
+                    case 'loader'
+                        res = loader_test (trackers{1,tr}, fr);
                     case 'ub_gt'
                         res = ub_gt_test (grt,fr,initial_target_bb);
                     case 'ub_gt_first_size'

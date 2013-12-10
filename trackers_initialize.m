@@ -30,6 +30,8 @@ function [trackers] =  trackers_initialize ( tracker_list, tracker_parameters , 
             case 'rgbd_pf_grid_occ'
                 disp '4'
                 % e.g. the object to track in the multiple object cases
+            case 'loader'
+                x = loader_init (tracker_parameters{1,tr});
             case 'ub_gt'
                 x = ub_gt_init (tracker_parameters{1,tr});
             case 'ub_gt_first_size'

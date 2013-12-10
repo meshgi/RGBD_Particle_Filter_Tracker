@@ -8,8 +8,8 @@ x.N         = params.number_of_particles;
 x.fn        = params.feature_name;
 x.sm        = params.similarity_measure;
 x.vt        = params.variance_from_target;
-x.occ_th    = params.occlusion_flag_th;
-x.last      = NaN(1,4);
+x.occ_pr    = params.occlusion_probability;
+x.target    = NaN(1,4);
 x.bkg_det   = params.bkg_detection;
 x.bkg_sub   = params.bkg_subtraction;
 

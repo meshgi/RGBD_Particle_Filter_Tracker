@@ -18,9 +18,12 @@ function [box, z] = initialize_particles_bb (img, N, w_rng, h_rng, grid, w_noise
         nocc_init = 1; % no occlusion handled
     end
 
+	% figure;    imshow(mask);    hold on %DEBUG MODE
     for i = 1:N
         box(i,:)=create_box(img, w_rng, h_rng, uint16(grid), w_noise, h_noise, mask);
+        % rectangle('Position',box(i,:),'EdgeColor','y'); %DEBUG MODE
     end
+    % hold off % DEBUG MODE
     
     z = rand(N,1) > nocc_init;
 end

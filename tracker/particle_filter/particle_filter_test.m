@@ -3,6 +3,9 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
 %using selected features
 %   ---------------description
 %
+%
+%
+%   SELF = tracker
 %   code by: Kourosh Meshgi, Dec 2013
 %   https://github.com/meshgi/RGBD_Particle_Filter_Tracker
 
@@ -26,16 +29,8 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
         end
         [rgb_msk, dep_msk] = bkg_subtraction ( self.bkg_sub , rgb_raw, dep_raw, rgb_bkg , dep_bkg);
         
-        % color centers
-        if ( self.rgb_bins_load )
-            load (['bkg/' video_name '/rgb_ctr.mat']);
-        else
-            rgb_ctr = color_clustering (rgb_raw , self.rgb_clustering_samples, self.rgb_bins);
-            save(['bkg/' video_name '/rgb_ctr.mat'],'rgb_ctr');
-        end
-        
-        % confidence measure
-        rgb_cnf = 1; % to be loaded, or trained
+        % create feature space
+        self = initialize_features (self, video_name);
         
         % initialize bounding boxes around foreground points
         [boxes , z] = initialize_particles_bb (rgb_raw, self.N, ...
@@ -51,9 +46,7 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
         self.target     = init_bb;    
         self.rgb_bkg    = rgb_bkg;
         self.dep_bkg    = dep_bkg;
-        self.rgb_ctr    = rgb_ctr;
-        self.rgb_cnf    = rgb_cnf;
-        self.boxes      = boxes;
+        self.bbs        = boxes;
         self.z          = z;
         
     else
@@ -77,24 +70,31 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
         t = bb_feature_extraction ( self.target , self.g, ...
                                     rgb_raw, dep_raw, ...
                                     rgb_msk, dep_msk, ...
-                                    self.rgb_ctr, self.rgb_cnf );
+                                    self.feature );
                                     
         % particles characteristics
         for i = 1:self.N
+            particle.z = self.z(i);
             
-            % calculate features
-            p = bb_feature_extraction ( self.boxes(i,:) , self.g, ...
-                                        rgb_raw, dep_raw, ...
-                                        rgb_msk, dep_msk, ...
-                                        self.rgb_ctr, self.rgb_cnf );
-  
+            if ( particle.z == 0 ) % not occluded
+                % calculate features
+                particle = bb_feature_extraction ( self.bbs(i,:) , self.g, ...
+                                            rgb_raw, dep_raw, ...
+                                            rgb_msk, dep_msk, ...
+                                            self.feature );
+
+                particle = bb_feature_distance ( particle , t, self.g, self.feature );
+
+                particle = bb_minus_log_likelihood ( particle , self.feature );
+            else             % occluded
+                particle.minus_log_likelihood = self.occ_pr;
+            end
             
-            
-            
-            
-            
+            likelihood(i) = particle.minus_log_likelihood;
         end
-                
+        
+        bb_prob = bb_normalize_minus_log_likelihood (likelihood);
+            
         
         bb = NaN(1,4); %% Dummy
     end

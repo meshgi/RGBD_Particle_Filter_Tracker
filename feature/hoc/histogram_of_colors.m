@@ -18,4 +18,5 @@ end
 freq = hist( idx, 1:num_bins );                                              % counting members of each bin
 freq = freq / num_pixels;
 
-hist_vis (freq, ctrs);
+% h = figure; subplot (2,2,1); imshow (img); subplot(2,2,2); imshow(msk); subplot(2,2,[3,4]); hist_vis (freq, ctrs); %DEBUG MODE
+% close(h); % DEBUG MODE
