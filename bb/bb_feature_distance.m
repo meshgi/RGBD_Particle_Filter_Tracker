@@ -1,0 +1,50 @@
+function x = bb_feature_distance ( x ,y , g, features )
+
+    for f = 1:size(features,2)
+
+        % calculating the distance of each feature
+        switch (features{f}.sim)
+
+            case 'Euclidean'
+                % Matlab is stupid! Array1 and Array2 can be uint8, so
+                % array1-array2 can't be negative!
+                array1 = double(x.cell(1,1).feature(f).val);
+                array2 = double(y.cell(1,1).feature(f).val);
+                d = sum((array1-array2).^2);
+                
+                if ( isnan(d) )
+                    % HoC is empty
+                    d = Inf;
+                end
+                x.dist(f) = d;
+                
+            case 'Bhattacharyya'
+
+
+            case 'Euclidean(Grid2)'
+                % TO BE REVVISED
+                x.dist(f) = 0;
+                g = 2;
+                for i = 1:g
+                    for j = 1:g
+                        cell_bb = bb_grid (bb,g,i,j);
+                        
+                        array1 = x.cell(i,j).feature(f).val;
+                        array2 = y.cell(i,j).feature(f).val;
+                        d = sum((array1-array2).^2);
+                        x.dist(f) = x.dist(f) + d;
+                    end
+                end
+        end
+    end
+end
+
+
+% Euclidean
+% Bhattacharyya
+% Intersection
+% ...
+% Euclidean(Grid2)
+% Euclidean(Grid3)
+% ...
+% Euclidean(Grid2,Weighted)

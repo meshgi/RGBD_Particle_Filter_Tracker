@@ -1,4 +1,4 @@
-function [box, z] = initialize_particles_bb (img, N, w_rng, h_rng, grid, w_noise, h_noise, mask, nocc_init)
+function [box, z] = initialize_particles_bb (img, N, w_rng, h_rng, grid, w_noise, h_noise, mask, init_bb, nocc_init)
 % Create bounding boxes as particles in particle filter
 
     %N: number of boxes
@@ -14,13 +14,18 @@ function [box, z] = initialize_particles_bb (img, N, w_rng, h_rng, grid, w_noise
         h_noise = 0;
     end
     
-    if (nargin < 9)
+    if (nargin < 10)
         nocc_init = 1; % no occlusion handled
     end
+    
+    % limit mask to desired foreground object only
+    trimmed_mask = zeros(size(mask));              % create new mask, initialized by nothing
+    [a,b] = rect_span(init_bb);                    % define the rectangle around the init_bb
+    trimmed_mask(a,b) = bb_content(mask,init_bb);  % copy the defined rectangle to the trimmed mask
 
-	% figure;    imshow(mask);    hold on %DEBUG MODE
+	% figure;    subplot(1,2,1) ;imshow(mask); subplot(1,2,2) ;imshow(trimmed_mask);   hold on %DEBUG MODE
     for i = 1:N
-        box(i,:)=create_box(img, w_rng, h_rng, uint16(grid), w_noise, h_noise, mask);
+        box(i,:)=create_box(img, w_rng, h_rng, uint16(grid), w_noise, h_noise, trimmed_mask);
         % rectangle('Position',box(i,:),'EdgeColor','y'); %DEBUG MODE
     end
     % hold off % DEBUG MODE

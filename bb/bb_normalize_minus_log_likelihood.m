@@ -5,3 +5,7 @@ pr = (1.0 / sum (exp(-normal_li))) * exp(-normal_li);
 
 % hist(pr);
 
+if any(isnan(pr))
+    disp ('jiiiiiiigho havaar');
+end
+

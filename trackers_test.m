@@ -78,7 +78,7 @@ function results  =  trackers_test ( test_videos , trackers , control )
             end
             tracker_output(1:4,1:4,fr) %%%%%%%%%% PRINT OUT
             
-            imshow(rgb);
+            imshow(depth);
             if ~isnan(tracker_output(1,1:4,fr)), rectangle('Position',tracker_output(1,1:4,fr),'EdgeColor','r'); end
             if ~isnan(tracker_output(2,1:4,fr)), rectangle('Position',tracker_output(2,1:4,fr),'EdgeColor','g'); end;
             if ~isnan(tracker_output(3,1:4,fr)), rectangle('Position',tracker_output(3,1:4,fr),'EdgeColor','b'); end;

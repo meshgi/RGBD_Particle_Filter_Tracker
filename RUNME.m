@@ -1,5 +1,4 @@
 addpath(genpath('.'));
-clc
 clear
 close all
 
@@ -41,6 +40,9 @@ control.test_videos = {'new_ex_occ4'};
 % 'lb_crazy'   
 % 'lb_invisible'
 
+console_messages ('clear');
+console_messages ('add' , 'Initializing Trackers');
+
 control.tracker_list = {'loader', 'ub_gt_first_size', 'lb_rand_loc', 'particle_filter'};
 params1.name = 'loader';
 params1.filename = 'tracker/loader/loader_test.txt';
@@ -50,9 +52,9 @@ params3.name = 'alg 3';
 
 params4.name                    = 'particle filter';
 params4.number_of_particles     = 100;
-params4.feature_name            = {'HoC(RGB Clustering)', 'medD'}; %HoC (RGB Clustering,Grid2) , HoC (RGB Clustering,Grid3), HoC (HSV),...
-params4.similarity_measure      = {'Euclidean'          , 'Euclidean'};
-params4.variance_from_target    = [100                  , 5];
+params4.feature_name            = {'medD'}; %HoC (RGB Clustering,Grid2) , HoC (RGB Clustering,Grid3), HoC (HSV),...
+params4.similarity_measure      = {'Euclidean'};
+params4.variance_from_target    = [ 5];
 params4.occlusion_probability   = 0.3;
 params4.bkg_detection           = 'temporal median';
 params4.bkg_subtraction         = 'thresholding';
@@ -60,7 +62,9 @@ params4.bkg_subtraction         = 'thresholding';
 tracker_parameters = {params1, params2, params3, params4};
 
 %% Tracking Scenario
+console_messages ('newline' , 'Tracking Scenario ... 1');
 trackers    =  trackers_initialize ( control.tracker_list, tracker_parameters , control );
+console_messages ('add' , '... 2');
 trackers    =  trackers_train ( control.train_videos , trackers , control );
 results     =  trackers_test ( control.test_videos , trackers , control );
 evaluation  =  trackers_evaluate ( control.test_videos , trackers , control , results );

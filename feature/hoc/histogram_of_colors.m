@@ -20,3 +20,7 @@ freq = freq / num_pixels;
 
 % h = figure; subplot (2,2,1); imshow (img); subplot(2,2,2); imshow(msk); subplot(2,2,[3,4]); hist_vis (freq, ctrs); %DEBUG MODE
 % close(h); % DEBUG MODE
+
+if (isnan(freq(1)))
+    disp ('Warning! Image has no foreground, thus num_pixels = 0');
+end
