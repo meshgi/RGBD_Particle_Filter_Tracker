@@ -47,19 +47,20 @@ control.tracker_list = {'loader', 'ub_gt_first_size', 'lb_rand_loc', 'particle_f
 params1.name = 'loader';
 params1.filename = 'tracker/loader/loader_test.txt';
 
-params2.name = 'alg 2';
-params3.name = 'alg 3';
+params2.name = 'ub_gt_first_size';
+params3.name = 'lb_rand_loc';
 
 params4.name                    = 'particle filter';
 params4.number_of_particles     = 100;
 params4.feature_name            = {'HoC(RGB Clustering)', 'medD'}; %HoC (RGB Clustering,Grid2) , HoC (RGB Clustering,Grid3), HoC (HSV),...
 params4.similarity_measure      = {'L2',                  'L2' };
 params4.feature_importance      = [ 1,                     1];
+params4.feature_normalizer      = [ 2,                     256^256];
 params4.occlusion_probability   = 0.3;
 params4.bkg_detection           = 'temporal median';
 params4.bkg_subtraction         = 'thresholding';
 params4.model_update            = 'none';
-params4.enable_occ_flag         = false;
+params4.enable_occ_flag         = true;
 
 tracker_parameters = {params1, params2, params3, params4};
 
@@ -72,30 +73,3 @@ evaluation  =  trackers_evaluate ( control.test_videos , trackers , control , re
 %             trackers_output ( control.test_videos , trackers , control , results );
 
 
-
-% 
-% 
-% 
-% 
-% [vid_param, directory, num_frames, cam_param, gt, init_bb]   = video_info(control.video_name);
-% 
-% for i = 1:num_frames
-%     [rgb, depth] =  read_frame(vid_param, directory, i);
-%     
-%     %show the 2D image
-%     subplot(1,2,1); imshow(rgb);
-%     rectangle('Position',gt(1:4,i),'EdgeColor','y');
-%     subplot(1,2,2); imshow(depth);
-%     rectangle('Position',gt(1:4,i),'EdgeColor','r');
-%     
-%     drawnow
-% end
-%     
-% % 
-% % % display in 3D: subsample to avoid too much to display.
-% % XYZpoints = XYZpoints(:,1:20:end);
-% % RGBpoints = RGBpoints(:,1:20:end);
-% % subplot(1,3,3); scatter3(XYZpoints(1,:),XYZpoints(2,:),XYZpoints(3,:),ones(1,size(XYZpoints,2)),double(RGBpoints)'/255,'filled');
-% % axis equal; view(0,-90);
-% % imtool(depth)
-% 

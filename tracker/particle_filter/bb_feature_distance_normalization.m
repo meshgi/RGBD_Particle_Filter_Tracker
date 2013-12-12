@@ -2,7 +2,11 @@ function p = bb_feature_distance_normalization ( p )
 
     N = length(p);
     for i = 1:N
-        d(i,:) = p{i}.dist;
+        if (p{i}.z == 0)
+            d(i,:) = p{i}.dist;
+        else
+            d(i,:) = NaN(1,2);
+        end
     end
 
     mind = min(d);

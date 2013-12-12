@@ -86,6 +86,7 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
                                                    rgb_msk, dep_msk, ...
                                                    self.feature );
 
+                % features distance to template
                 particle{i} = bb_feature_distance ( particle{i} , self.model ,self.g ,self.feature );
                 
                 % h =
@@ -95,17 +96,10 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
                 % close (h);
             end
 
-        end
-        
-        % particles feature channels normalization
-        particle = bb_feature_distance_normalization ( particle );
-        
-        
-        % particles likelihood calculation considering occlusion vs. no occlusion case
-        for i = 1:self.N
             particle{i}.z = self.z(i);
             particle{i}.bb = self.bbs(i,:);
-            
+
+            % particles likelihood calculation considering occlusion vs. no occlusion case
             if (particle{i}.z == 0 ) % not occluded
                 particle{i} = bb_minus_log_likelihood ( particle{i} , self.feature );
             else                     % occluded
@@ -113,6 +107,9 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
             end
             likelihood(i) = particle{i}.minus_log_likelihood;
         end
+
+        % ATTENTION! particles feature channels normalization was a mistake, added
+        % normalization factor as a input...
         
         % particle probability calculation
         bb_prob = bb_normalize_minus_log_likelihood (likelihood);
@@ -140,12 +137,12 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
             model = self.model;
         end
 
-        % col = bb_prob_color_indicator (bb_prob , self.z); % DEBUG MODE
-        % h = figure;        imshow(rgb_raw);        pause(0.05); % DEBUG MODE
-        % for i = 1:size(self.bbs,1)
-        %     rectangle('Position',self.bbs(i,:),'EdgeColor',col(i,:));            pause(0.01);            drawnow; % DEBUG MODE
-        % end % DEBUG MODE
-        % close (h); % DEBUG MODE
+%         col = bb_prob_color_indicator (bb_prob , self.z); % DEBUG MODE
+%         h = figure;        imshow(rgb_raw);        pause(0.05); % DEBUG MODE
+%         for i = 1:size(self.bbs,1)
+%             rectangle('Position',self.bbs(i,:),'EdgeColor',col(i,:));            pause(0.01);            drawnow; % DEBUG MODE
+%         end % DEBUG MODE
+%         close (h); % DEBUG MODE
         
         % save data to tracker
         self.target     = proposed_bb;

@@ -5,6 +5,7 @@ for f = 1:size(self.fn,2)
     self.feature{f}.name = self.fn{1,f};
     self.feature{f}.sim = self.sm{1,f};
     self.feature{f}.imp = self.imp(f);
+    self.feature{f}.nrm = self.nrm(f);
 
     % global initilization of feature who needs it
     switch (self.fn{1,f})

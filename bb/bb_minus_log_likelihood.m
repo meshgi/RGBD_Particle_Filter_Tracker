@@ -8,7 +8,7 @@ for f = 1:size(features,2)
         continue;
     else
         importance_sum = importance_sum + 1.0 / features{f}.imp;
-        feature_mlog_likelihood = x.dist(f) / features{f}.imp;
+        feature_mlog_likelihood = x.dist(f) / features{f}.nrm / features{f}.imp;
         l = l + feature_mlog_likelihood;
     end
 end

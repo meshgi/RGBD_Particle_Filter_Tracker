@@ -8,6 +8,7 @@ x.N         = params.number_of_particles;
 x.fn        = params.feature_name;
 x.sm        = params.similarity_measure;
 x.imp       = params.feature_importance;
+x.nrm       = params.feature_normalizer;
 x.occ_pr    = params.occlusion_probability;
 x.target    = NaN(1,4);
 x.bkg_det   = params.bkg_detection;
