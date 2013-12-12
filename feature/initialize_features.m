@@ -4,7 +4,7 @@ for f = 1:size(self.fn,2)
     % create space for each feature
     self.feature{f}.name = self.fn{1,f};
     self.feature{f}.sim = self.sm{1,f};
-    self.feature{f}.var = self.vt(f);
+    self.feature{f}.imp = self.imp(f);
 
     % global initilization of feature who needs it
     switch (self.fn{1,f})

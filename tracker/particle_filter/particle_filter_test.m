@@ -37,65 +37,123 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
                                                self.box_w_range , self.box_h_range, ...
                                                self.g, ...
                                                self.max_velocity_x, self.max_velocity_x, ...
-                                               rgb_msk);
+                                               rgb_msk, init_bb);
         
+        % initial model
+        model = bb_feature_extraction ( init_bb , self.g, ...
+                                        rgb_raw, dep_raw, ...
+                                        rgb_msk, dep_msk, ...
+                                        self.feature );
+                                           
         % first bounding box (bb = target)
         bb = init_bb;
         
         % saving tracker parameters
-        self.target     = init_bb;    
+        self.target     = init_bb;
+        self.target_z   = 0;
         self.rgb_bkg    = rgb_bkg;
         self.dep_bkg    = dep_bkg;
         self.bbs        = boxes;
         self.z          = z;
+        self.model      = model;
         
     else
         self.frame = self.frame + 1;
+        console_messages ('newline',['frame: ' num2str(self.frame)]);
 
 %         3-1- Calculate Features for Bounding Boxes and Target
 %         3-2- Measure Particle Features to Target
 %         3-3- Calculate Particle Likelihood Based on Feature
 %         3-4- Normalize Features Between All Particles
 %         3-5- Calculate Particle Likelihood via Log-Sum-Exp
-%         3-6- Normalize Particle Likelihood to Make Probability
-%         3-7- Apply Occlusion Flag
-%         3-8- Update Target, Target Model Model & Anti-Jitter policy
-%         3-9- Resampling
+%         3-6- Apply Occlusion Flag
+%         3-7- Normalize Particle Likelihood to Make Probability
+%         3-8- Update Target
+%         3-9- Resampling & Anti-Jitter policy
+%         3-10- Update Target Model 
         
         % global data
-        [m,n] = size(dep_raw);
         [rgb_msk, dep_msk] = bkg_subtraction ( self.bkg_sub , rgb_raw, dep_raw, self.rgb_bkg , self.dep_bkg);
-        
-        % target statistics
-        t = bb_feature_extraction ( self.target , self.g, ...
-                                    rgb_raw, dep_raw, ...
-                                    rgb_msk, dep_msk, ...
-                                    self.feature );
                                     
         % particles characteristics
         for i = 1:self.N
-            particle.z = self.z(i);
             
-            if ( particle.z == 0 ) % not occluded
+            % extract features for no occlusion case
+            if (self.z(i) == 0 ) 
                 % calculate features
-                particle = bb_feature_extraction ( self.bbs(i,:) , self.g, ...
-                                            rgb_raw, dep_raw, ...
-                                            rgb_msk, dep_msk, ...
-                                            self.feature );
+                particle{i} = bb_feature_extraction ( self.bbs(i,:) , self.g, ...
+                                                   rgb_raw, dep_raw, ...
+                                                   rgb_msk, dep_msk, ...
+                                                   self.feature );
 
-                particle = bb_feature_distance ( particle , t, self.g, self.feature );
-
-                particle = bb_minus_log_likelihood ( particle , self.feature );
-            else             % occluded
-                particle.minus_log_likelihood = self.occ_pr;
+                particle{i} = bb_feature_distance ( particle{i} , self.model ,self.g ,self.feature );
+                
+                % h =
+                % figure('toolbar','none','menubar','none','color','k','units','normalized','outerposition',[0 0 1 1]); 
+                % subplot(2,1,1);  hist_vis (particle{i}.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
+                % subplot(2,1,2);  hist_vis (self.model.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
+                % close (h);
             end
-            
-            likelihood(i) = particle.minus_log_likelihood;
+
         end
         
-        bb_prob = bb_normalize_minus_log_likelihood (likelihood);
-            
+        % particles feature channels normalization
+        particle = bb_feature_distance_normalization ( particle );
         
-        bb = NaN(1,4); %% Dummy
+        
+        % particles likelihood calculation considering occlusion vs. no occlusion case
+        for i = 1:self.N
+            particle{i}.z = self.z(i);
+            particle{i}.bb = self.bbs(i,:);
+            
+            if (particle{i}.z == 0 ) % not occluded
+                particle{i} = bb_minus_log_likelihood ( particle{i} , self.feature );
+            else                     % occluded
+                particle{i}.minus_log_likelihood = self.occ_pr;
+            end
+            likelihood(i) = particle{i}.minus_log_likelihood;
+        end
+        
+        % particle probability calculation
+        bb_prob = bb_normalize_minus_log_likelihood (likelihood);
+        
+        % expected target and its state of visibility
+        [proposed_bb, proposed_z] = expected_target ( self.bbs, self.z, bb_prob );
+        
+        % particle resampling proportional to probability
+        [resampled_bbs, resampled_z] = bb_resample ( self.bbs, self.z, bb_prob, ...
+                                                     proposed_bb, proposed_z, ...
+                                                     rgb_raw, ...
+                                                     self.box_w_range , self.box_h_range, ...
+                                                     self.max_velocity_x, self.max_velocity_y, ...
+                                                     self.g, self.state_transition_matrix );
+                                                 
+                                                 
+        % target model update, only when no occlusion is expected
+        if ( proposed_z == 0 )
+            proposed_t = bb_feature_extraction ( self.target , self.g, ...
+                                        rgb_raw, dep_raw, ...
+                                        rgb_msk, dep_msk, ...
+                                        self.feature );
+            model = model_update ( self.update , self.model , proposed_t , self);
+        else
+            model = self.model;
+        end
+
+        % col = bb_prob_color_indicator (bb_prob , self.z); % DEBUG MODE
+        % h = figure;        imshow(rgb_raw);        pause(0.05); % DEBUG MODE
+        % for i = 1:size(self.bbs,1)
+        %     rectangle('Position',self.bbs(i,:),'EdgeColor',col(i,:));            pause(0.01);            drawnow; % DEBUG MODE
+        % end % DEBUG MODE
+        % close (h); % DEBUG MODE
+        
+        % save data to tracker
+        self.target     = proposed_bb;
+        self.target_z   = proposed_z;
+        self.bbs        = resampled_bbs;
+        self.z          = resampled_z;
+        self.model      = model;
+        
+        bb = floor(proposed_bb); %% iteration output
     end
 end %======================================================================

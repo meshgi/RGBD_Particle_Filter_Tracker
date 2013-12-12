@@ -1,7 +1,7 @@
 function [nominal, variance, avg] = median_of_depth ( dmap, mask)
 
 pts = dmap(:);
-pts = pts(find(mask(:) == 1));
+% pts = pts(find(mask(:) == 1));  % enables background sutraction
 
 if isempty(pts)
     nominal = 255;

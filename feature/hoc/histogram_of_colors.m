@@ -1,7 +1,8 @@
 function freq = histogram_of_colors   (img, msk, ctrs )
 
 img_reshaped = reshape( img, size(img,1)*size(img,2), size(img,3) );
-img_valid = img_reshaped(find(msk==1),:);
+% img_valid = img_reshaped(find(msk==1),:); % enables background sutraction
+img_valid = img_reshaped; % disables background subtraction
 
 num_pixels = size( img_valid, 1 );                                           % fg pixel count
 num_bins = size(ctrs,1);                                                     % bin count

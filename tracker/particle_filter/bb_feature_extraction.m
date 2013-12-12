@@ -6,7 +6,9 @@ for f = 1:size(features,2)
     switch (features{f}.name)
 
         case 'HoC(RGB Clustering)'
-            x.cell(1,1).feature(f).val    = histogram_of_colors   (bb_content(rgb_raw,bb), bb_content(rgb_msk,bb), features{f}.rgb_ctr );
+            im = bb_content(rgb_raw,bb);
+            ms = bb_content(rgb_msk,bb);
+            x.cell(1,1).feature(f).val    = histogram_of_colors   (im, ms, features{f}.rgb_ctr );
             
         case 'HoC(Uniform)'
             x.cell(1,1).feature(f).val    = histogram_of_colors   (bb_content(rgb_raw,bb), bb_content(rgb_msk,bb), features{f}.rgb_ctr );

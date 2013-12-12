@@ -5,7 +5,7 @@ function x = bb_feature_distance ( x ,y , g, features )
         % calculating the distance of each feature
         switch (features{f}.sim)
 
-            case 'Euclidean'
+            case 'L2'
                 % Matlab is stupid! Array1 and Array2 can be uint8, so
                 % array1-array2 can't be negative!
                 array1 = double(x.cell(1,1).feature(f).val);
@@ -19,10 +19,19 @@ function x = bb_feature_distance ( x ,y , g, features )
                 x.dist(f) = d;
                 
             case 'Bhattacharyya'
+            case 'Intersection'
+            case 'KL-divergance'
+            case 'GMM-dist'
+            case 'Quadratic'
+            case 'Cosine'
+            case 'Chi-sqaure'
+            case 'Diffusion'
+            case 'Earth Mover'
+            case 'Correlation'
 
 
-            case 'Euclidean(Grid2)'
-                % TO BE REVVISED
+            case 'L2,Grid2'
+                % TO BE REVISED
                 x.dist(f) = 0;
                 g = 2;
                 for i = 1:g
@@ -35,16 +44,14 @@ function x = bb_feature_distance ( x ,y , g, features )
                         x.dist(f) = x.dist(f) + d;
                     end
                 end
+                
+            case 'L2,Grid3'
+            case 'L2,Grid2,Weighted'
         end
     end
+
+    % disp ([x.dist(1) x.dist(2)]);
+
 end
 
 
-% Euclidean
-% Bhattacharyya
-% Intersection
-% ...
-% Euclidean(Grid2)
-% Euclidean(Grid3)
-% ...
-% Euclidean(Grid2,Weighted)
