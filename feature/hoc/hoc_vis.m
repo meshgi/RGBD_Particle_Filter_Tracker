@@ -1,4 +1,4 @@
-function hist_vis (h, ctrs)
+function hoc_vis (h, ctrs)
 
 if (nargin == 0)
     % demo mode

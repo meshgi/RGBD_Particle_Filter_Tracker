@@ -13,7 +13,7 @@ function x = bb_feature_distance ( x ,y , g, features )
                 d = sum((array1-array2).^2);
                 
                 if ( isnan(d) )
-                    % HoC is empty
+                    % e.g. HoC is empty
                     d = Inf;
                 end
                 x.dist(f) = d;

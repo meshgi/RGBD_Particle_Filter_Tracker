@@ -24,13 +24,17 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
             load (['bkg/' video_name '/dep_bkg.mat']);
         else
             [rgb_bkg,dep_bkg] = offline_bkg_detection ( self.bkg_det, video_name , self.bkg_det_samples );
-            save(['bkg/' video_name '/rgb_bkg.mat'],'rgb_bkg');
-            save(['bkg/' video_name '/dep_bkg.mat'],'dep_bkg');    
+            fld = ['bkg/' video_name];
+            if (~exist(fld,'dir'))
+                mkdir(fld);
+            end
+            save([fld '/rgb_bkg.mat'],'rgb_bkg');
+            save([fld '/dep_bkg.mat'],'dep_bkg');    
         end
         [rgb_msk, dep_msk] = bkg_subtraction ( self.bkg_sub , rgb_raw, dep_raw, rgb_bkg , dep_bkg);
         
         % create feature space
-        self = initialize_features (self, video_name);
+        self = initialize_features (self, rgb_raw, video_name);
         
         % initialize bounding boxes around foreground points
         [boxes , z] = initialize_particles_bb (rgb_raw, self.N, ...
@@ -89,11 +93,10 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
                 % features distance to template
                 particle{i} = bb_feature_distance ( particle{i} , self.model ,self.g ,self.feature );
                 
-                % h =
-                % figure('toolbar','none','menubar','none','color','k','units','normalized','outerposition',[0 0 1 1]); 
-                % subplot(2,1,1);  hist_vis (particle{i}.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
-                % subplot(2,1,2);  hist_vis (self.model.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
-                % close (h);
+%                 h =figure('toolbar','none','menubar','none','color','k','units','normalized','outerposition',[0 0 1 1]); 
+%                 subplot(2,1,1);  hist_vis (particle{i}.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
+%                 subplot(2,1,2);  hist_vis (self.model.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
+%                 close (h);
             end
 
             particle{i}.z = self.z(i);
@@ -106,6 +109,9 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
                 particle{i}.minus_log_likelihood = self.occ_pr;
             end
             likelihood(i) = particle{i}.minus_log_likelihood;
+            
+%             h = vis_particle (i,rgb_raw,dep_raw,rgb_msk,particle{i}.bb,particle{i}.cell(1,1).feature(1).val,particle{i}.cell(1,1).feature(2).val,particle{i}.dist(1),particle{i}.dist(2),likelihood(i),self.feature{1}.rgb_ctr,self.model.cell(1,1).feature(1).val,self.target);
+%             close (h);
         end
 
         % ATTENTION! particles feature channels normalization was a mistake, added
@@ -147,10 +153,47 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
         % save data to tracker
         self.target     = proposed_bb;
         self.target_z   = proposed_z;
-        self.bbs        = resampled_bbs;
+        self.bbs        = floor(resampled_bbs);
         self.z          = resampled_z;
         self.model      = model;
         
-        bb = floor(proposed_bb); %% iteration output
+        if (self.z > self.occ_thr )
+            bb = NaN(1,4);
+        else
+            bb = floor(proposed_bb); %% iteration output
+        end
+    
     end
+    
+    % history saving
+    if self.frame > 1
+        self.history = tracker_history ( self, particle, bb_prob );
+    else
+        self.history = tracker_history ( self, [], [] );
+    end
+    
 end %======================================================================
+
+
+
+
+% % visualization list:
+% 
+
+% 
+% % for each particle
+% color histogram
+% median of depth
+% confidence map
+% feature distance to template
+% grids color histogram
+% grids median of depth
+% grids confidence map
+% confidence of each grid with drawing beta distribution
+% position of the box on image and depth map
+% 
+% % evaluation
+% CPE vs time (average CPE)
+% success plot (AUC)
+% error type pie chart
+% SA

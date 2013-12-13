@@ -10,6 +10,7 @@ x.sm        = params.similarity_measure;
 x.imp       = params.feature_importance;
 x.nrm       = params.feature_normalizer;
 x.occ_pr    = params.occlusion_probability;
+x.occ_thr   = params.occlusion_flag_threshold;
 x.target    = NaN(1,4);
 x.bkg_det   = params.bkg_detection;
 x.bkg_sub   = params.bkg_subtraction;
@@ -24,8 +25,8 @@ x.bkg_det_load                  = true;
 
 % HoC RGB Clustering
 x.rgb_clustering_samples        = 3000;
-x.rgb_bins = 40;                                                            % number of bins in RGB
-x.rgb_bins_load = 1;
+x.rgb_bins                      = 40;                                       % number of bins in RGB
+x.rgb_bins_load                 = true;
 
 % particle dynamics
 x.box_w_range                   = [50, 150];

@@ -55,8 +55,9 @@ params4.number_of_particles     = 100;
 params4.feature_name            = {'HoC(RGB Clustering)', 'medD'}; %HoC (RGB Clustering,Grid2) , HoC (RGB Clustering,Grid3), HoC (HSV),...
 params4.similarity_measure      = {'L2',                  'L2' };
 params4.feature_importance      = [ 1,                     1];
-params4.feature_normalizer      = [ 2,                     256^256];
+params4.feature_normalizer      = [ 2,                     1];
 params4.occlusion_probability   = 0.3;
+params4.occlusion_flag_threshold = 0.3;
 params4.bkg_detection           = 'temporal median';
 params4.bkg_subtraction         = 'thresholding';
 params4.model_update            = 'none';
@@ -66,10 +67,10 @@ tracker_parameters = {params1, params2, params3, params4};
 
 %% Tracking Scenario
 % console_messages ('newline' , 'Tracking Scenario ... 1');
-trackers    =  trackers_initialize ( control.tracker_list, tracker_parameters , control );
-trackers    =  trackers_train ( control.train_videos , trackers , control );
-results     =  trackers_test ( control.test_videos , trackers , control );
-evaluation  =  trackers_evaluate ( control.test_videos , trackers , control , results );
-%             trackers_output ( control.test_videos , trackers , control , results );
+trackers                =  trackers_initialize ( control.tracker_list, tracker_parameters , control );
+trackers                =  trackers_train ( control.train_videos , trackers , control );
+[results,trackers]      =  trackers_test ( control.test_videos , trackers , control );
+evaluation              =  trackers_evaluate ( control.test_videos , trackers , control , results );
+                           trackers_output ( control.test_videos , trackers , control , results );
 
 
