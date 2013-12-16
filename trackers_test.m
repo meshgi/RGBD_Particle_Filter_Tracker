@@ -86,13 +86,6 @@ function [results, trackers]  =  trackers_test ( test_videos , trackers , contro
             pause(0.1)
             drawnow;
 
-            % % display in 3D: subsample to avoid too much to display.
-            % XYZpoints = XYZpoints(:,1:20:end);
-            % RGBpoints = RGBpoints(:,1:20:end);
-            % subplot(1,3,3); scatter3(XYZpoints(1,:),XYZpoints(2,:),XYZpoints(3,:),ones(1,size(XYZpoints,2)),double(RGBpoints)'/255,'filled');
-            % axis equal; view(0,-90);
-            % imtool(depth)
-
         end
     video_tracking_footage(vid,:,:,:) = tracker_output;
     

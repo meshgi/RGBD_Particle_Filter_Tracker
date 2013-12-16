@@ -2,23 +2,20 @@ function x = bb_feature_distance ( x ,y , g, features )
 
     for f = 1:size(features,2)
 
+        % Matlab is stupid! Array1 and Array2 can be uint8, so
+        % array1-array2 can't be negative!
+        array1 = double(x.cell(1,1).feature(f).val);
+        array2 = double(y.cell(1,1).feature(f).val);
+                
         % calculating the distance of each feature
         switch (features{f}.sim)
 
             case 'L2'
-                % Matlab is stupid! Array1 and Array2 can be uint8, so
-                % array1-array2 can't be negative!
-                array1 = double(x.cell(1,1).feature(f).val);
-                array2 = double(y.cell(1,1).feature(f).val);
-                d = sum((array1-array2).^2);
-                
-                if ( isnan(d) )
-                    % e.g. HoC is empty
-                    d = Inf;
-                end
-                x.dist(f) = d;
+                d = dist_l2 ( array1 , array2 );
                 
             case 'Bhattacharyya'
+                d = dist_bhattacharyya ( array1 , array2 );
+                
             case 'Intersection'
             case 'KL-divergance'
             case 'GMM-dist'
@@ -48,6 +45,12 @@ function x = bb_feature_distance ( x ,y , g, features )
             case 'L2,Grid3'
             case 'L2,Grid2,Weighted'
         end
+        
+        if ( isnan(d) )
+            % e.g. HoC is empty
+            d = Inf;
+        end
+        x.dist(f) = d;
     end
 
     % disp ([x.dist(1) x.dist(2)]);
