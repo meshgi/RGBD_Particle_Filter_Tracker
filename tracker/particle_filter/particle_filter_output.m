@@ -21,150 +21,45 @@ for fr = start:num_frames
         
     
     % =====================================================================
-% 	title('Final Tracking Results (Depth Map): Ground Truth (green) vs Tracker Output (Yellow)','Color','w');
+% 	  title('Final Tracking Results (Depth Map): Ground Truth (green) vs Tracker Output (Yellow)','Color','w');
 %     vis_final_tracker_track (dep_raw, bb, bb_gt );
     
     % =====================================================================
-    
-    
-    depthInpaint = double(dep_raw)/1000;  % convert from mm to m
-    [x,y] = meshgrid(1:640, 1:480);   
-    
-    cx = cam_param(1,3); cy = cam_param(2,3);  
-    fx = cam_param(1,1); fy = cam_param(2,2);
-    
-    Xworld = (x-cx).*depthInpaint*1/fx;  
-    Yworld = (y-cy).*depthInpaint*1/fy;  
-    Zworld = depthInpaint;  
-    
-    validM = dep_raw~=0;  
-    XYZworldframe = [Xworld(:)'; Yworld(:)'; Zworld(:)'];  
-    valid = validM(:)';    
-     
-    % XYZworldframe 3xn and RGB 3xn  
-    RGB = [reshape(rgb_raw(:,:,1),1,[]);reshape(rgb_raw(:,:,2),1,[]);reshape(rgb_raw(:,:,3),1,[])];  
-    XYZpoints = XYZworldframe(:,valid);  
-    RGBpoints = RGB(:,valid);  
-     
-    % display in 3D: subsample to avoid too much to display.  
-    XYZpoints = XYZpoints(:,1:1:end);  
-    RGBpoints = RGBpoints(:,1:1:end);  
-    scatter3(XYZpoints(1,:),XYZpoints(2,:),XYZpoints(3,:),ones(1,size(XYZpoints,2)),double(RGBpoints)'/255,'filled');  
-    axis equal; view(0,-90); 
+
+% 	title('Video Sequence 3D View (2.5 D)','Color','w');
+% 	vis_point_cloud (rgb_raw, dep_raw, cam_param, [0,-90] );
     
     % =====================================================================
-    
-%     bbz = isnan(bb(1));
-%     s = calculate_S (bb_gt,bb);
-%     to = 0.5;
-%     
-%     if (s == -1)
-%         if (bbz == 1)
-%             % error TYPE II: missed the target 
-%             k = 2;
-%         else
-%             % error TYPE III: false positive, identity loss 
-%             k = 3;
-%         end
-%     else
-%         if (s < to )
-%             % error TYPE I: overlap not significant
-%             k = 1;
-%         else
-%             % tracker did a good job
-%             k = 4;
-%         end
-%     end
-%     error_type(k) = error_type(k) + 1;
-%     
-%     bar(error_type,'FaceColor','b');
-%     hold on
-%     overlay = zeros(1,4);  overlay(k) = error_type(k);
-%     bar(overlay,'FaceColor','r');
-%     ylim([0 num_frames])
-%     set(gca,'XTickLabel',{'low overlap','miss','false positive','good detection'});
-%     xlabel (['Success rate (t_o = ' num2str(to) ')']);
-%     pause(0.1)
+%   	title('Tracker Error Types','Color','w');
+%     set(gca, 'XColor', 'w', 'YColor', 'w');
+% 	vis_error_types (bb, bb_gt, 0.5 );
 %     
     % =====================================================================
-%    
-%     imshow(rgb_raw);
-%     for i = 1:fr
-%         bbi = floor(self.history.target(i,:));
-%         bbi_gt = (gt(1:4,i))';
-%         
-%         bb_traj_x(i) = bbi(1) + bbi(3)/2;
-%         bb_traj_y(i) = bbi(2) + bbi(4)/2;
-%         bbg_traj_x(i) = bbi_gt(1) + bbi_gt(3)/2;
-%         bbg_traj_y(i) = bbi_gt(2) + bbi_gt(4)/2;
-%     end
-%     hold on;
-%     plot(bb_traj_x,bb_traj_y,'-yo','LineWidth',2,'MarkerEdgeColor','y','MarkerFaceColor','y','MarkerSize',8);
-%     hold on;
-%     plot(bbg_traj_x,bbg_traj_y,'-go','LineWidth',2,'MarkerEdgeColor','g','MarkerFaceColor','g','MarkerSize',8);
-%     hold off;
-%     pause(0.1)
+
+%     title('Final Tracking Trajectory: Ground Truth (green) vs Tracker Output (Yellow)','Color','w');
+% 	vis_final_tracker_trajectory (rgb_raw, gt , self,  fr );
+%      
 %     
     % =====================================================================
     
-%     for i = 1:num_frames
-%         bbi = floor(self.history.target(i,:));
-%         bbi_gt = (gt(1:4,i))';
-%         
-%         cpe(i) = calculate_CPE (bbi_gt,bbi);
-%     end
-%     
-%     plot(1:fr,cpe(1:fr),'LineWidth',2);
-%     hold on;
-%     plot(fr,cpe(fr),'ro');
-%     xlabel('Frames');
-%     ylabel('CPE(pixel)');
-% 
-%     mc = max(cpe);
-%     xlim([1 num_frames]);
-%     ylim([0 mc]);
-%     hold on
-%     
-%     % http://stackoverflow.com/questions/6245626/matlab-filling-in-the-area-between-two-sets-of-data-lines-in-one-figure
-%     occ = isnan(cpe);
-% %     line ([find(occ)' find(occ)'+1],repmat(mc,sum(occ),2),'LineWidth',2);
-% %     line ([find(occ)' find(occ)'+1],repmat(0,sum(occ),2),'LineWidth',2);
-% %     fill ([find(occ)' find(occ)'+1],repmat(mc,sum(occ),2)
-%       
-    % =====================================================================
-% 
-%     for i = 1:fr
-%         bbi(i,:) = floor(self.history.target(i,:));
-%         bbi_gt(i,:) = (gt(1:4,i))';
-%     end
-%     
-%     hold on
-%     plot(1:fr, bbi(:,3), 'b-','LineWidth',2);
-%     plot(1:fr, bbi_gt(:,3), 'b--','LineWidth',2);
-%     
-%     plot(1:fr, bbi(:,4), 'r-','LineWidth',2);
-%     plot(1:fr, bbi_gt(:,4), 'r--','LineWidth',2);
-%     
-%     sa = sqrt((bbi(:,3)-bbi_gt(:,3)).^2 + (bbi(:,4)-bbi_gt(:,4)).^2);
-%     plot(1:fr, sa, 'k-','LineWidth',3);
-%     
-%     xlim([1 num_frames]);
-%     ylim([0 sqrt(sum(size(rgb_raw).^2))]);
-%     hold off;    
-%     
-%         
-    % =====================================================================
+%     title('Final Tracking Central Point Error','Color','w');
+%     set(gca, 'YColor', 'w');
+% 	vis_final_tracker_cpe (num_frames, self, gt, fr );
     
-%     col = bb_prob_color_indicator (self.history.probs(fr,:) , self.history.z(fr,:));
-%     imshow(rgb_raw);
-%     bbs = squeeze(floor(self.history.bbs(fr,:,:)));
-%     
-%     for i = 1:self.N
-%         rectangle('Position',bbs(i,:),'EdgeColor',col(i,:));
-%         pause(0.01);
-%         drawnow;
-%     end
-%     
+    % =====================================================================
+%     title('Final Tracking Size Adaptation: Width(blue), Height(red), Ground Truth(dashed), Szie Adaptation Error(black)','Color','w');
+%     set(gca, 'YColor', 'w');
+% 	vis_final_tracker_sae (rgb_raw, num_frames, self, gt, fr );
+        
+    % =====================================================================
+    title('Particle Dynamics - Box Position and Probability Indicator: Red(occlusion chance), Brighter (more probable). Darker(less probable)','Color','w');
+	
+    vis_particle_position_probability (rgb_raw, self, fr , 1);
+    for i = 2:self.N
+        vis_particle_position_probability ([], self, fr , i);
+        pause(0.01);
+    end
+    
 
     % =====================================================================
 
