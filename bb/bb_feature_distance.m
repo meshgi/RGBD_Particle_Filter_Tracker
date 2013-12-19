@@ -50,6 +50,11 @@ function x = bb_feature_distance ( x ,y , g, features )
             % e.g. HoC is empty
             d = Inf;
         end
+        
+        if ( d == 0 )
+            disp ('ey havaaar');
+        end
+
         x.dist(f) = d;
     end
 

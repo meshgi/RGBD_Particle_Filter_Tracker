@@ -1,11 +1,50 @@
-function particle_filter_output (gt, self , vid_param, cam_param, directory, num_frames, start)
+function particle_filter_demo (gt, self , vid_param, cam_param, directory, num_frames, start)
 
-% fh = figure('toolbar','none','menubar','none','color','k','units','normalized','outerposition',[0 0 1 1],'name','Occlusion Aware Particle Framework');
+% frame rate = 20;
+% 
+% 0.5 title
+% 1 loop 3d point cloud
+% 0.5 sec pause
+% 0.5 title 
+% 1 loop tracking rgb
+% 0.5 sec pause
+% 1 loop stabilized image
+% 0.5 sec pause
+% 1 loop tracking dep
+% 0.5 sec pause
+% 1 loop stabilized depth image
+% 0.5 sec pause
+% 0.5 title
+% 1 loop trackig bkg sutracted
+% 0.5 sec pause
+% 0.5 title
+% 1 loop tracker rgb + tracker trajectory
+% 0.5 sec pause
+% 1 loop tracker rgb + tracker trajectory + cpe vs time
+% 0.5 sec pause
+% 1 loop cpe vs time
+% 0.5 sec pause
+% 0.5 title
+% 1 loop tracking rgb + tracker error
+% 0.5 sec pause
+% 1 loop tracking rgb + tracker error + cpe vs time
+% 0.5 sec pause
+% 0.5 title
+% 1 loop tracking rgb + size vs time
+% 0.5 sec pause
+% 
+% finally: visualize success plot
+
+
+
+fh = figure('toolbar','none','menubar','none','color','k','units','normalized','outerposition',[0 0 1 1],'name','Occlusion Aware Particle Framework');
 error_type = zeros (1,4);
 
-% writerObj = VideoWriter('output/v1.avi'); % VID
-% writerObj.FrameRate = 10; % VID
-% open(writerObj); % VID
+writerObj = VideoWriter('output/v1.avi');
+writerObj.FrameRate = 20;
+open(writerObj);
+
+
 
 for fr = start:num_frames
     [rgb_raw, dep_raw] =  read_frame(vid_param, directory, fr);
@@ -165,5 +204,8 @@ end
 
 
 
-
+function insert_title (str)
+annotation('textbox',...
+    [0 0 1 1],'String',str,'LineWidth',2,'BackgroundColor',[0 0 0],...
+    'FontSize',100,'FontName','Arial','Color',[1 1 1]);
 
