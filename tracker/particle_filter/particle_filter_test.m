@@ -34,7 +34,7 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
         [rgb_msk, dep_msk] = bkg_subtraction ( self.bkg_sub , rgb_raw, dep_raw, rgb_bkg , dep_bkg);
         
         % create feature space
-        self = initialize_features (self, rgb_raw, video_name);
+        self = initialize_features (self, rgb_raw, video_name , init_bb);
         
         % initialize bounding boxes around foreground points
         [boxes , z] = initialize_particles_bb (rgb_raw, self.N, ...
@@ -165,7 +165,7 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
     
     end
     
-    % history saving
+%     % history saving
     if self.frame > 1
         self.history = tracker_history ( self, particle, bb_prob );
     else

@@ -10,6 +10,9 @@ function x = bb_feature_distance ( x ,y , g, features )
         % calculating the distance of each feature
         switch (features{f}.sim)
 
+            case 'L1'
+                d = dist_l1 ( array1 , array2 );
+                
             case 'L2'
                 d = dist_l2 ( array1 , array2 );
                 
@@ -49,10 +52,6 @@ function x = bb_feature_distance ( x ,y , g, features )
         if ( isnan(d) )
             % e.g. HoC is empty
             d = Inf;
-        end
-        
-        if ( d == 0 )
-            disp ('ey havaaar');
         end
 
         x.dist(f) = d;

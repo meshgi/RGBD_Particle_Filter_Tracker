@@ -22,7 +22,7 @@ control.initialize_input_method = 'file';  %file,hand,detector
 control.start_frame = 1;
 control.success_plot_thresold_steps = 20;
 
-control.train_videos = {'bear_front' , 'child_no1', 'face_occ5', 'zcup_move_1'};
+control.train_videos = { 'bear_front', 'face_occ5', 'zcup_move_1', 'child_no1'};
 control.test_videos = {'new_ex_occ4'};
 
 %% Tracker Initialization parameters
@@ -43,19 +43,25 @@ control.test_videos = {'new_ex_occ4'};
 console_messages ('clear');
 console_messages ('add' , 'Initializing Trackers');
 
-control.tracker_list = {'loader', 'ub_gt_first_size', 'lb_rand_loc', 'particle_filter'};
-params1.name = 'loader';
-params1.filename = 'tracker/loader/loader_test.txt';
+control.tracker_list = {'lb_rand_size', 'ub_gt_first_size', 'lb_rand_loc', 'particle_filter'};
+params1.name = 'lb_rand_size';
+% params1.name = 'loader';
+% params1.filename = 'tracker/loader/loader_test.txt';
 
 params2.name = 'ub_gt_first_size';
 params3.name = 'lb_rand_loc';
 
 params4.name                    = 'particle filter';
 params4.number_of_particles     = 100;
+
+
 params4.feature_name            = {'HoC(RGB Clustering)', 'medD'}; %HoC (RGB Clustering,Grid2) , HoC (RGB Clustering,Grid3), HoC (HSV),...
-params4.similarity_measure      = {'Bhattacharyya',       'L2' };
+params4.similarity_measure      = {'Bhattacharyya',       'L1' };
 params4.feature_importance      = [ 1,                     1];
 params4.feature_normalizer      = [ 1,                     1];
+
+
+
 params4.occlusion_probability   = 3.912;
 params4.occlusion_flag_threshold = 0.3;
 params4.bkg_detection           = 'temporal median';

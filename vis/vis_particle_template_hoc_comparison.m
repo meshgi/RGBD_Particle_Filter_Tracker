@@ -8,7 +8,7 @@ function vis_particle_template_hoc_comparison (rgb_raw, self , fr , particle_no)
     
     hoc2 = histogram_of_colors(bb_content(rgb_raw,bbs(particle_no,:)),[],ctrs);
     subplot (3,1,2); hoc_vis (hoc2,ctrs);
-    subplot (3,1,3); bar (abs(hoc1-hoc2)); xlim([0 length(hoc1)]); ylim([0 0.2]); drawnow;
+    subplot (3,1,3); hoc_vis (abs(hoc1-hoc2),ctrs);%bar (abs(hoc1-hoc2)); xlim([0 length(hoc1)]); ylim([0 0.2]); drawnow;
     drawnow;
     
 end

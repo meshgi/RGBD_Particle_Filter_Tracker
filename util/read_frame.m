@@ -31,34 +31,34 @@ function [ rgb, depth, XYZpoints, RGBpoints ] = read_frame( frames, directory, f
 
 %% Create 3D World
 
-    if nargin > 3
-        
-        % Camera Intrinsic parameters K is [fx 0 cx; 0 fy cy; 0 0 1];
-        K = cam_param;
-        cx = K(1,3);cy = K(2,3);
-        fx = K(1,1);fy = K(2,2);
-        
-        % 3D point for the frame
-        depthInpaint = depth/1000;
-        [x,y] = meshgrid(1:640, 1:480); 
-        Xworld = (x-cx).*depthInpaint*1/fx;
-        Yworld = (y-cy).*depthInpaint*1/fy;
-        Zworld = depthInpaint;
-        validM = depth~=0;
-        XYZworldframe = [Xworld(:)'; Yworld(:)'; Zworld(:)'];
-        valid = validM(:)';   
-
-        % XYZworldframe 3xn and RGB 3xn
-        RGB = [reshape(rgb(:,:,1),1,[]);reshape(rgb(:,:,2),1,[]);reshape(rgb(:,:,3),1,[])];
-        XYZpoints = XYZworldframe(:,valid);
-        RGBpoints = RGB(:,valid);
-        
-    else
-        
-        XYZpoints = [];
-        RGBpoints = [];
-        
-    end
+%     if nargin > 3
+%         
+%         % Camera Intrinsic parameters K is [fx 0 cx; 0 fy cy; 0 0 1];
+%         K = cam_param;
+%         cx = K(1,3);cy = K(2,3);
+%         fx = K(1,1);fy = K(2,2);
+%         
+%         % 3D point for the frame
+%         depthInpaint = depth/1000;
+%         [x,y] = meshgrid(1:640, 1:480); 
+%         Xworld = (x-cx).*depthInpaint*1/fx;
+%         Yworld = (y-cy).*depthInpaint*1/fy;
+%         Zworld = depthInpaint;
+%         validM = depth~=0;
+%         XYZworldframe = [Xworld(:)'; Yworld(:)'; Zworld(:)'];
+%         valid = validM(:)';   
+% 
+%         % XYZworldframe 3xn and RGB 3xn
+%         RGB = [reshape(rgb(:,:,1),1,[]);reshape(rgb(:,:,2),1,[]);reshape(rgb(:,:,3),1,[])];
+%         XYZpoints = XYZworldframe(:,valid);
+%         RGBpoints = RGB(:,valid);
+%         
+%     else
+%         
+%         XYZpoints = [];
+%         RGBpoints = [];
+%         
+%     end
     
     %% Rescale depth
     depth(depth==0) = 10000;

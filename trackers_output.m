@@ -17,4 +17,4 @@ function trackers_output ( test_videos , trackers , control , results )
     
     particle_filter_output (ground_truth{1}, trackers{4} , vid_param, cam_param , directory, num_frames, control.start_frame);
     
-    particle_filter_demo (ground_truth{1}, trackers{4} , vid_param, cam_param , directory, num_frames, control.start_frame);
+%     particle_filter_demo (ground_truth{1}, trackers{4} , vid_param, cam_param , directory, num_frames, control.start_frame);

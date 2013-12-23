@@ -18,7 +18,7 @@ function vis_particle_medd_distances ( self, num_frames, fr)
     plot (2:fr,w_avg_medd_dist,'k-','LineWidth',4);
     
     xlim([1 num_frames+1]);
-    ylim([0 1]);
+    ylim([0 0.5]);
     drawnow
     
 end

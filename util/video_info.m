@@ -18,6 +18,7 @@ function [vid_param, directory, num_frames, cam_param, ground_truth, init_bb] = 
         fid = fopen([directory dataset_name '.txt']);
         ground_truth = fscanf(fid, '%g,%g,%g,%g,%g', [5,inf]);
         fclose(fid);
+        num_frames = min (num_frames,size(ground_truth,2));
     else
         ground_truth = [];
     end
@@ -29,5 +30,5 @@ function [vid_param, directory, num_frames, cam_param, ground_truth, init_bb] = 
     else
         init_bb = [];
     end
-    
+
 end %======================================================================

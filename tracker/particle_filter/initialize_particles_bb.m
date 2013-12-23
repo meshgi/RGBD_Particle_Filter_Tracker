@@ -25,7 +25,7 @@ function [box, z] = initialize_particles_bb (img, N, w_rng, h_rng, grid, w_noise
 
 	% figure;    subplot(1,2,1) ;imshow(mask); subplot(1,2,2) ;imshow(trimmed_mask);   hold on %DEBUG MODE
     for i = 1:N
-        box(i,:)=create_box(img, w_rng, h_rng, uint16(grid), w_noise, h_noise, trimmed_mask);
+        box(i,:)=create_box(img, w_rng, h_rng, uint16(grid), w_noise, h_noise, trimmed_mask , init_bb);
         % rectangle('Position',box(i,:),'EdgeColor','y'); %DEBUG MODE
     end
     % hold off % DEBUG MODE
@@ -34,20 +34,19 @@ function [box, z] = initialize_particles_bb (img, N, w_rng, h_rng, grid, w_noise
 end
 
 
-function box=create_box(im, w_range, h_range, g, w_noise, h_noise, mask)
+function box=create_box(im, w_range, h_range, g, w_noise, h_noise, mask, init_bb)
 % Create bouding box in 3 different cases: 
 % 1- normal bb,
 % 2- grid bb, and
 % 3- grid bb centered on foreground
 
-% meaningful range of box width and heigh
-% w_range=[50 200];
-% h_rang=[200 400]
-% h=2.5*w
-% [x,y,w,h]
-% g is grid size
+% initial sizes should be like init_bb if present
+
+
+
     if (isempty(mask))
         % uniformely distributed particles
+        
         box(3)= w_range(1)+rand*(w_range(2)-w_range(1));                             %w[50 200]
         box(4)= h_range(1)+rand*(h_range(2)-h_range(1));                             %h [200 400]
 
@@ -57,7 +56,7 @@ function box=create_box(im, w_range, h_range, g, w_noise, h_noise, mask)
         box=ceil(box);
 
     else
-        % the partcle centers are foreground points 
+        % the particle centers are foreground points 
         [fg_y,fg_x] = find(mask ==1);
 
         r = randi(size(fg_x,1));

@@ -35,25 +35,81 @@ function particle_filter_demo (gt, self , vid_param, cam_param, directory, num_f
 % 
 % finally: visualize success plot
 
+Hz = 20;
 
 
-fh = figure('toolbar','none','menubar','none','color','k','units','normalized','outerposition',[0 0 1 1],'name','Occlusion Aware Particle Framework');
 error_type = zeros (1,4);
-
-writerObj = VideoWriter('output/v1.avi');
-writerObj.FrameRate = 20;
-open(writerObj);
+drawnow;
 
 
 
-for fr = start:num_frames
-    [rgb_raw, dep_raw] =  read_frame(vid_param, directory, fr);
 
-    % =====================================================================
-    bb = floor(self.history.target(fr,:));
-    bb_gt = (gt(1:4,fr))';
+% =====================================================================
+    % Shot 1: Showing Dataset: RGB Image (full) + DEP Image (full) + Point
+    % Cloud Rotatting
+    fh = figure('toolbar','none','menubar','none','color','k','units','normalized','name','Occlusion Aware Particle Framework','outerposition',[0 0 1 1]);
+%     set(gcf,'Renderer','zbuffer');
+    writerObj = VideoWriter('output/v1.avi');
+    writerObj.FrameRate = Hz;
+    open(writerObj);    
+
+    title('Dataset: RGB Frame','Color','w');
+    for fr = start:num_frames
+        [rgb_raw, ~] =  read_frame(vid_param, directory, fr);
+        imshow(rgb_raw);
+        drawnow; frame = getframe(gcf);
+        writeVideo(writerObj,frame);
+    end
+%     for i = 1:0.3*Hz,    writeVideo(writerObj,getframe());    end; % duration in video 
     
-    % =====================================================================
+    title('Dataset: Depth Map (brighter is closer)','Color','w');
+    for fr = start:num_frames
+        [~, dep_raw] =  read_frame(vid_param, directory, fr);
+        imshow(dep_raw);
+        drawnow; frame = getframe(gcf);
+        writeVideo(writerObj,frame);
+    end
+%     for i = 1:0.3*Hz,    writeVideo(writerObj,getframe());    end; % duration in video 
+        
+    title('Video Sequence 3D View (2.5 D)','Color','w');
+    d_el = (0 - (-37.5)) / (num_frames-start-10);
+    d_az = (-90 - (30)) / (num_frames-start-10);
+    
+    for fr = start:10 %num_frames
+        [rgb_raw, dep_raw] =  read_frame(vid_param, directory, fr);
+        if ( num_frames - fr < 10 )
+            el = 0;
+            az = -90;
+        else
+            el = -37.5 + (fr-start)* d_el;
+            az = 30 + (fr-start)* d_az;
+        end
+        vis_point_cloud (rgb_raw, dep_raw, cam_param, [el,az] );
+        drawnow; frame = getframe(gcf);
+        writeVideo(writerObj,frame);
+    end
+%     for i = 1:1*Hz,    writeVideo(writerObj,getframe());    end; % duration in video 
+    
+    close(writerObj);
+    
+    
+
+
+% 
+% 
+% for fr = start:num_frames
+%     [rgb_raw, dep_raw] =  read_frame(vid_param, directory, fr);
+% 
+%     % =====================================================================
+%     bb = floor(self.history.target(fr,:));
+%     bb_gt = (gt(1:4,fr))';
+%     
+    
+    
+    
+    
+    
+    
     
 %     title('Final Tracking Results: Ground Truth (green) vs Tracker Output (Yellow)','Color','w');
 %     vis_final_tracker_track (rgb_raw, bb, bb_gt );
@@ -193,19 +249,19 @@ for fr = start:num_frames
  % CONFIDENCE MAP
  % TEMPLATE EVOLUTION (OLD TEMPLATE, NEW ENTRY, NEW TEMPLATE)
 
+% end
+
+
+
 end
 
 
-%     frame = getframe; % VID
-%     writeVideo(writerObj,frame); % VID
-
-
-% close(writerObj); % VID
-
-
-
 function insert_title (str)
-annotation('textbox',...
-    [0 0 1 1],'String',str,'LineWidth',2,'BackgroundColor',[0 0 0],...
-    'FontSize',100,'FontName','Arial','Color',[1 1 1]);
+    annotation('textbox',...
+                [0 0 1 1],'String',str,'LineWidth',2,'BackgroundColor',[0 0 0],...
+                'FontSize',100,'FontName','Arial','Color',[1 1 1]);
+end
+
+
+
 

@@ -1,4 +1,4 @@
-function self = initialize_features (self, rgb_raw, video_name)
+function self = initialize_features (self, rgb_raw, video_name, init_bb)
 
 for f = 1:size(self.fn,2)
     % create space for each feature
@@ -15,7 +15,7 @@ for f = 1:size(self.fn,2)
             if ( self.rgb_bins_load )
                 load (['bkg/' video_name '/rgb_ctr.mat']);
             else
-                rgb_ctr = color_clustering (rgb_raw , self.rgb_clustering_samples, self.rgb_bins);
+                rgb_ctr = color_clustering (rgb_raw , self.rgb_clustering_samples, self.rgb_bins, init_bb);
                 fld = ['bkg/' video_name];
                 if (~exist(fld,'dir'))
                     mkdir(fld);

@@ -10,7 +10,7 @@ function vis_particle_probability ( self, fr )
     
     bins = 0: 0.001 : maxp+0.001;
     h1 = histc(probs,bins);
-    bar (bins,h1);
+    bar (bins,h1,'FaceColor','c');
     hold on;
     
     p2 = probs;

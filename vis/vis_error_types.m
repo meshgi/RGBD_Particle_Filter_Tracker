@@ -1,4 +1,4 @@
-function vis_error_types (bb, bb_gt, to )
+function error_type =  vis_error_types (bb, bb_gt, to, error_type , num_frames)
 
     bbz = isnan(bb(1));
     s = calculate_S (bb_gt,bb);
@@ -29,6 +29,6 @@ function vis_error_types (bb, bb_gt, to )
     ylim([0 num_frames])
     set(gca,'XTickLabel',{'low overlap','miss','false positive','good detection'});
     xlabel (['Success rate (t_o = ' num2str(to) ')']);
-    drwanow;
+    drawnow;
 
 end
