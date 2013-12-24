@@ -2,7 +2,7 @@ function vis_particle_template_medd_comparison ( self, dep_raw , fr , bb)
 
     bbs = squeeze(floor(self.history.bbs(fr,:,:)));
     
-    medd_template = 255* self.history.model_med_depth;
+    medd_template = 255* self.history.model_med_depth(fr);
     subplot(2,1,1);   imhist(dep_raw);
     hold on;
     plot (medd_template,5,'r^','MarkerEdgeColor','r','MarkerFaceColor','r','MarkerSize',15);
@@ -11,6 +11,7 @@ function vis_particle_template_medd_comparison ( self, dep_raw , fr , bb)
     subplot(2,1,2);   imhist(bb_content(dep_raw,bb));
     hold on;
     line ([medd_template medd_template], ylim() , 'Color', 'r', 'LineStyle','--', 'LineWidth',6);
+    ylabel('median of depth of the template', 'Color' , 'w');
     
     last = -1; %FLASH EFFECT
     for i = 1:self.N
@@ -22,8 +23,9 @@ function vis_particle_template_medd_comparison ( self, dep_raw , fr , bb)
         last = medd; %FLASH EFFECT
         
         plot (medd,5,'y^','MarkerEdgeColor','y','MarkerFaceColor','y','MarkerSize',10);
+        ylabel(['frame :' num2str(fr) ' - particle :' num2str(i)], 'Color' , 'w');
+        
         drawnow;
-        pause (0.1);
     end
     
     plot (last,5,'b^','MarkerEdgeColor','b','MarkerFaceColor','b','MarkerSize',10); %FLASH EFFECT

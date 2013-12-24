@@ -62,11 +62,11 @@ params4.feature_normalizer      = [ 1,                     1];
 
 
 
-params4.occlusion_probability   = 3.912;
+params4.occlusion_probability   = 0.3;
 params4.occlusion_flag_threshold = 0.3;
 params4.bkg_detection           = 'temporal median';
 params4.bkg_subtraction         = 'thresholding';
-params4.model_update            = 'none';
+params4.model_update            = 'moving_average';
 params4.enable_occ_flag         = true;
 
 tracker_parameters = {params1, params2, params3, params4};

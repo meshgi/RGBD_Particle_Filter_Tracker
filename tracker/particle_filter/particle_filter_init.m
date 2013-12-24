@@ -30,7 +30,7 @@ x.rgb_bins_load                 = true;
 
 % particle dynamics
 x.box_w_range                   = [50, 250];
-x.box_h_range                   = [50, 250];
+x.box_h_range                   = [50, 400];
 
 x.max_velocity_x                = 40;
 x.max_velocity_y                = 40;

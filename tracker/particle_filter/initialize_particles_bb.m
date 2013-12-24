@@ -25,7 +25,7 @@ function [box, z] = initialize_particles_bb (img, N, w_rng, h_rng, grid, w_noise
 
 	% figure;    subplot(1,2,1) ;imshow(mask); subplot(1,2,2) ;imshow(trimmed_mask);   hold on %DEBUG MODE
     for i = 1:N
-        box(i,:)=create_box(img, w_rng, h_rng, uint16(grid), w_noise, h_noise, trimmed_mask , init_bb);
+        box(i,:) = create_box(img, w_rng, h_rng, uint16(grid), w_noise, h_noise, trimmed_mask , init_bb);
         % rectangle('Position',box(i,:),'EdgeColor','y'); %DEBUG MODE
     end
     % hold off % DEBUG MODE
@@ -47,9 +47,11 @@ function box=create_box(im, w_range, h_range, g, w_noise, h_noise, mask, init_bb
     if (isempty(mask))
         % uniformely distributed particles
         
-        box(3)= w_range(1)+rand*(w_range(2)-w_range(1));                             %w[50 200]
-        box(4)= h_range(1)+rand*(h_range(2)-h_range(1));                             %h [200 400]
-
+%         box(3)= w_range(1)+rand*(w_range(2)-w_range(1));                             %w[50 200]
+%         box(4)= h_range(1)+rand*(h_range(2)-h_range(1));                             %h [200 400]
+        box(3) = min(init_bb(3),w_range(2)); %%%% NEW
+        box(4) = min(init_bb(4),h_range(2)); %%%% NEW
+        
         box(1)=1+rand*(size(im,2)-box(3)-10);                                       %set restriction [1 640-w-2]
         box(2)=1+rand*(size(im,1)-box(4)-10);                                       %set restriction [1 480-h-2]
 
@@ -64,14 +66,16 @@ function box=create_box(im, w_range, h_range, g, w_noise, h_noise, mask, init_bb
                              fg_y(r) + randi(h_noise), ...
                              h_range(1), h_range(2), ...
                              w_range(1), w_range(2), ...
-                             size(im,1), size(im,2));
+                             size(im,1), size(im,2), ...
+                             init_bb);
         while ( isempty(box) )
             r = randi(size(fg_x,1));
             box = can_make_box ( fg_x(r) + randi(w_noise), ...
                                  fg_y(r) + randi(h_noise), ...
                                  h_range(1), h_range(2), ...
                                  w_range(1), w_range(2), ...
-                                 size(im,1), size(im,2));
+                                 size(im,1), size(im,2), ...
+                                 init_bb);
         end
 
     end
@@ -83,7 +87,7 @@ end
 
 
 
-function box = can_make_box(x,y,min_h,max_h,min_w,max_w,img_h,img_w)
+function box = can_make_box(x,y,min_h,max_h,min_w,max_w,img_h,img_w,init_bb)
 % Checks whether it is possible to make bb with valid sizes, if it is
 % possible make a valid random one centered on given coordinates
 
@@ -110,9 +114,11 @@ function box = can_make_box(x,y,min_h,max_h,min_w,max_w,img_h,img_w)
     max_h = min3(max_h, 2*top_margin, 2*dwn_margin);
 
     % make a random box in valid size
-    w = min_w + randi(max_w-min_w + 1) - 1;
-    h = min_h + randi(max_h-min_h + 1) - 1;
-
+%     w = min_w + randi(max_w-min_w + 1) - 1;
+%     h = min_h + randi(max_h-min_h + 1) - 1;
+    w = min(max_w,init_bb(3)); %%%% NEW
+    h = min(max_h,init_bb(4)); %%%% NEW
+    
     box = ceil([x-w/2,y-h/2,w,h]);
 end
 

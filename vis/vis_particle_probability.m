@@ -22,6 +22,6 @@ function vis_particle_probability ( self, fr )
     
     xlim([0,maxp+0.001]);
     ylim([0,10]);
-    drawnow;
+    set(gca, 'XColor', 'w', 'YColor', 'w'); %% No Good- Interface dependant
     
 end

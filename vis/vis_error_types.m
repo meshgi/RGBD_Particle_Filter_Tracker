@@ -28,7 +28,7 @@ function error_type =  vis_error_types (bb, bb_gt, to, error_type , num_frames)
     bar(overlay,'FaceColor','r');
     ylim([0 num_frames])
     set(gca,'XTickLabel',{'low overlap','miss','false positive','good detection'});
-    xlabel (['Success rate (t_o = ' num2str(to) ')']);
+    xlabel (['Success rate (t_o = ' num2str(to) ') - frame: ' num2str(sum(error_type(:)))]);
     drawnow;
 
 end

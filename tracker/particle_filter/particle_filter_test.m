@@ -110,6 +110,7 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
             end
             likelihood(i) = particle{i}.minus_log_likelihood;
             
+            
 %             h = vis_particle (i,rgb_raw,dep_raw,rgb_msk,particle{i}.bb,particle{i}.cell(1,1).feature(1).val,particle{i}.cell(1,1).feature(2).val,particle{i}.dist(1),particle{i}.dist(2),likelihood(i),self.feature{1}.rgb_ctr,self.model.cell(1,1).feature(1).val,self.target);
 %             close (h);
         end
@@ -131,18 +132,52 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
                                                      self.max_velocity_x, self.max_velocity_y, ...
                                                      self.g, self.state_transition_matrix );
                                                  
+                 
                                                  
-        % target model update, only when no occlusion is expected
-        if ( proposed_z < self.occ_thr )
-            proposed_t = bb_feature_extraction ( self.target , self.g, ...
-                                        rgb_raw, dep_raw, ...
-                                        rgb_msk, dep_msk, ...
-                                        self.feature );
-            model = model_update ( self.update , self.model , proposed_t , self);
-        else
-            model = self.model;
-        end
+        % MESSY CODE, FIX IT!!!!!!!!!!!!!!!!!!!
+        
+        
+        
+%         % target model update, only when no occlusion is expected
+%         if ( proposed_z < self.occ_thr )
+%             proposed_t = bb_feature_extraction ( self.target , self.g, ...
+%                                         rgb_raw, dep_raw, ...
+%                                         rgb_msk, dep_msk, ...
+%                                         self.feature );
+%             model = model_update ( self.update , self.model , proposed_t , self);
+%         else
+%             model = self.model;
+%         end
 
+        
+        % target model update, only when no occlusion is expected
+            
+        proposed_t = bb_feature_extraction ( self.target , self.g, ...
+                                    rgb_raw, dep_raw, ...
+                                    rgb_msk, dep_msk, ...
+                                    self.feature );
+        model_nocc = model_update ( self.update , self.model , proposed_t , self);
+        model_occ = self.model;
+
+        model = self.model;
+        model.cell(1,1).feature(2).val = proposed_z*model_occ.cell(1,1).feature(2).val + (1-proposed_z)*model_nocc.cell(1,1).feature(2).val;
+        
+
+        
+        % MESSY CODE, FIX IT!!!!!!!!!!!!!!!!!!!
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 %         col = bb_prob_color_indicator (bb_prob , self.z); % DEBUG MODE
 %         h = figure;        imshow(rgb_raw);        pause(0.05); % DEBUG MODE
 %         for i = 1:size(self.bbs,1)
@@ -176,24 +211,10 @@ end %======================================================================
 
 
 
-
-% % visualization list:
-% 
-
-% 
-% % for each particle
-% color histogram
-% median of depth
-% confidence map
-% feature distance to template
-% grids color histogram
-% grids median of depth
-% grids confidence map
-% confidence of each grid with drawing beta distribution
-% position of the box on image and depth map
-% 
-% % evaluation
-% CPE vs time (average CPE)
-% success plot (AUC)
-% error type pie chart
-% SA
+% TO DO:
+% model update
+% motion model adding (constant velocity x(t) = 2 x(t-1) - x(t-2) + noise)
+% add griding
+% add confidence
+% importance factor for depth
+% forgetting rate 

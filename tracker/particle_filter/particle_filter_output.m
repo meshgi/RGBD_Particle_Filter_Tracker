@@ -5,6 +5,7 @@ colormap('jet');
 % writerObj = VideoWriter('output/v1.avi'); % VID
 % writerObj.FrameRate = 10; % VID
 % open(writerObj); % VID
+pause;
 
 title('Final Tracking Results: Ground Truth (green) vs Tracker Output (Yellow)','Color','w');
 for fr = start:num_frames
@@ -158,7 +159,8 @@ for fr = start:num_frames
     bb_gt = (gt(1:4,fr))';
     
     vis_particle_probability ( self, fr );
-    set(gca, 'XColor', 'w', 'YColor', 'w');
+    xlabel(['frame: ' num2str(fr)],'Color','w');
+    drawnow;
 end
 pause; clf;
     % =====================================================================
@@ -202,6 +204,16 @@ for fr = start:num_frames
     bb_gt = (gt(1:4,fr))';
     
     subplot (1,2,1);  imshow (bb_content(rgb_raw,bb));
+    xlabel(['frame: ' num2str(fr)],'Color','w');
+    drawnow;
+    
+    if (~isnan(bb_gt(1)))
+        subplot (1,2,2);  imshow (bb_content(rgb_raw,bb_gt-[0 0 3 3]));
+        xlabel('ground truth','Color','w');
+    else
+        subplot (1,2,2);  cla;
+        xlabel('OCCLUSION!','Color','w');
+    end
     drawnow;
 end
 pause; clf;
@@ -211,23 +223,25 @@ pause; clf;
 %     subplot (1,2,2);  imshow (bb_content_safe(rgb_raw,[cpx-150,cpy-150,300,300]));
     
 	% =====================================================================
-title('Particle Dynamics - Particle HOC vs. Template HOC and the Difference','Color','w');   
-for fr = start:num_frames
-    [rgb_raw, dep_raw] =  read_frame(vid_param, directory, fr);
-
-    bb = floor(self.history.target(fr,:));
-    bb_gt = (gt(1:4,fr))';
-    
-    vis_particle_template_hoc_comparison (rgb_raw, self , fr , 1);
-    set(gca, 'YColor', 'w');
-    hold on;
-    for i = 1:self.N
-        vis_particle_template_hoc_comparison (rgb_raw, self , fr , i);
-        pause(0.1); drawnow;
-    end
-    hold off;
-end
-pause; clf;
+% title('Particle Dynamics - Particle HOC vs. Template HOC and the Difference','Color','w');   
+% for fr = start:num_frames
+%     [rgb_raw, dep_raw] =  read_frame(vid_param, directory, fr);
+% 
+%     bb = floor(self.history.target(fr,:));
+%     bb_gt = (gt(1:4,fr))';
+%     
+%     vis_particle_template_hoc_comparison (rgb_raw, self , fr , 1);
+%     set(gca, 'YColor', 'w');
+%     hold on;
+%     for i = 1:self.N
+%         vis_particle_template_hoc_comparison (rgb_raw, self , fr , i);
+%         set(gca, 'YColor', 'w');
+%         xlabel(['particle: ' num2str(i)],'Color','w');
+%         drawnow;
+%     end
+%     hold off;
+% end
+% pause; clf;
 %     
 %     ctrs = self.feature{1}.rgb_ctr;
 %     bbs = squeeze(floor(self.history.bbs(fr,:,:)));
@@ -253,7 +267,7 @@ for fr = start:num_frames
     bb_gt = (gt(1:4,fr))';
     
     vis_particle_template_medd_comparison ( self, dep_raw , fr , bb);
-    drawnow;
+    clf;
 end
 pause; clf;
     
