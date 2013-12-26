@@ -94,8 +94,8 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
                 particle{i} = bb_feature_distance ( particle{i} , self.model ,self.g ,self.feature );
                 
 %                 h =figure('toolbar','none','menubar','none','color','k','units','normalized','outerposition',[0 0 1 1]); 
-%                 subplot(2,1,1);  hist_vis (particle{i}.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
-%                 subplot(2,1,2);  hist_vis (self.model.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
+%                 subplot(2,1,1);  hoc_vis (particle{i}.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
+%                 subplot(2,1,2);  hoc_vis (self.model.cell(1,1).feature(1).val, self.feature{1}.rgb_ctr);
 %                 close (h);
             end
 
