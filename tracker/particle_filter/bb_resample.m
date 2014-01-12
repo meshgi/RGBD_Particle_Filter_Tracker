@@ -16,4 +16,4 @@ Z =         bb_occlusion_state_transition (Z, T);
 
 % archive the expected target, to avoid un-neccessary jiters in box
 B = [B; bb_grid_adjustment(ceil(expT),g)];                                     % the expected box adjusted to grid
-Z = [Z; uint8(expZ>0.5)];                                                   % if the occlusion prob is higher than 0.5 it is probably occluded
+Z = [Z; uint8(expZ>0.5)];  %% TO BE CONSIDERED                                                 % if the occlusion prob is higher than 0.5 it is probably occluded

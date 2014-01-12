@@ -31,7 +31,7 @@ end
 
 x.target(fr,:) = self.target;
 x.target_z(fr,:) = self.target_z;
-x.model_rgb_hist(fr,:) = self.model.cell.feature(1).val;
-x.model_med_depth(fr,:) = self.model.cell.feature(2).val;
+x.model_rgb_hist(fr,:) = self.model.cell(1,1).feature(1).val;
+x.model_med_depth(fr,:) = self.model.cell(1,1).feature(2).val;
 x.bbs(fr,:,:) = self.bbs;
 x.z(fr,:) = self.z;

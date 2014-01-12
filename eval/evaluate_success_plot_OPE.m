@@ -38,8 +38,10 @@ function [ auc, success_plots ] = evaluate_success_plot_OPE (test_videos , track
             auc(vid,tr) = sum(success(tr,:)); % area under curve for each tracker
         end
         success_plots(vid) = draw_success_plot (['Sequence: ' test_videos{1,vid}], control.success_plot_thresold_steps, success, trackers, auc);
+%         success_plots = []; % DEBUG MODE
+
     end
-    % draw_success_plot ('Average Performance Over All Videos', control.success_plot_thresold_steps, AVERAGE(success_OVER_VIDEOS), trackers, AVERAGE_OVER_VIDEOS(auc));
+%     draw_success_plot ('Average Performance Over All Videos', control.success_plot_thresold_steps, AVERAGE(success_OVER_VIDEOS), trackers, AVERAGE_OVER_VIDEOS(auc));
 
     
 end %======================================================================

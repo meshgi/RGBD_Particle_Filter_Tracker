@@ -76,6 +76,9 @@ function [results, trackers]  =  trackers_test ( test_videos , trackers , contro
                 end
                 tracker_output(tr,1:4,fr) = res(:);
             end
+            
+            
+            % TEMPORARY VISUALIZATION
             tracker_output(1:4,1:4,fr); %%%%%%%%%% PRINT OUT
             
             imshow(rgb);
@@ -83,7 +86,6 @@ function [results, trackers]  =  trackers_test ( test_videos , trackers , contro
             if ~isnan(tracker_output(2,1:4,fr)), rectangle('Position',tracker_output(2,1:4,fr),'EdgeColor','g'); end;
             if ~isnan(tracker_output(3,1:4,fr)), rectangle('Position',tracker_output(3,1:4,fr),'EdgeColor','b'); end;
             if ~isnan(tracker_output(4,1:4,fr)), rectangle('Position',tracker_output(4,1:4,fr),'EdgeColor','y'); end;
-            pause(0.1)
             drawnow;
 
         end

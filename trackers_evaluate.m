@@ -30,8 +30,9 @@ function eval  =  trackers_evaluate ( test_videos , trackers , control , results
     
     sa = evaluate_scale_adaptation (test_videos , trackers , control , results , ground_truth);
     
-
-    eval = [];
+%     cpe = [0,0,0,0]; % DEBUG
+%     sa = [0,0,0,0]; % DEBUG
+    eval = [cpe; sa; auc_list];
     
 %     disp(auc_list);
 %     disp(sa);

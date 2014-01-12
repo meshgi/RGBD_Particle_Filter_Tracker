@@ -30,11 +30,23 @@ for f = 1:size(self.fn,2)
             rgb_ctr = setprod (q,q,q);
             self.feature{f}.rgb_ctr = rgb_ctr;
 
-        case 'Grid Confidence (Beta)'
-
+        case 'HoC(RGB Clustering,Gridding with Confidence)'
+            % color centers
+            if ( self.rgb_bins_load )
+                load (['bkg/' video_name '/rgb_ctr.mat']);
+            else
+                rgb_ctr = color_clustering (rgb_raw , self.rgb_clustering_samples, self.rgb_bins, init_bb);
+                fld = ['bkg/' video_name];
+                if (~exist(fld,'dir'))
+                    mkdir(fld);
+                end
+                save([fld '/rgb_ctr.mat'],'rgb_ctr');
+            end
+            self.feature{f}.rgb_ctr = rgb_ctr;
+            
             % confidence measure
-            rgb_cnf = 1; % to be loaded, or trained
-            self.feature{f}.rgb_cnf = rgb_cnf;
+            load (['beta_dist_cells_' num2str(self.g) 'x' num2str(self.g) '.mat']);
+            self.feature{f}.rgb_cnf = pd;
 
     end
 end

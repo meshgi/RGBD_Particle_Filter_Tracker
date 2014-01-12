@@ -63,7 +63,8 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
         
     else
         self.frame = self.frame + 1;
-        console_messages ('newline',['frame: ' num2str(self.frame)]);
+%         console_messages ('newline',['frame: ' num2str(self.frame)]);
+
 
 %         3-1- Calculate Features for Bounding Boxes and Target
 %         3-2- Measure Particle Features to Target
@@ -80,7 +81,9 @@ function [bb, self] = particle_filter_test (rgb_raw, dep_raw, init_bb , self, vi
         [rgb_msk, dep_msk] = bkg_subtraction ( self.bkg_sub , rgb_raw, dep_raw, self.rgb_bkg , self.dep_bkg);
                                     
         % particles characteristics
-        for i = 1:self.N
+        particle = cell(self.N);
+        
+        parfor i = 1:self.N
             
             % extract features for no occlusion case
             if (self.z(i) == 0 ) 

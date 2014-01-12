@@ -4,7 +4,7 @@ close all
 
 
 %% General Settings of Environment
-control.enable_learning = false;
+control.enable_learning = true;
 
 control.visualize_tracker_result = true;
 control.visualize_tracking_history = false;
@@ -22,7 +22,7 @@ control.initialize_input_method = 'file';  %file,hand,detector
 control.start_frame = 1;
 control.success_plot_thresold_steps = 20;
 
-control.train_videos = { 'bear_front', 'face_occ5', 'zcup_move_1', 'child_no1'};
+control.train_videos = {'new_ex_occ4'};%{ 'bear_front', 'face_occ5', 'zcup_move_1', 'child_no1'};
 control.test_videos = {'new_ex_occ4'};
 
 %% Tracker Initialization parameters
@@ -55,19 +55,20 @@ params4.name                    = 'particle filter';
 params4.number_of_particles     = 100;
 
 
-params4.feature_name            = {'HoC(RGB Clustering)', 'medD'}; %HoC (RGB Clustering,Grid2) , HoC (RGB Clustering,Grid3), HoC (HSV),...
-params4.similarity_measure      = {'Bhattacharyya',       'L1' };
-params4.feature_importance      = [ 1,                     1];
-params4.feature_normalizer      = [ 1,                     1];
+params4.feature_name            = {'HoC(RGB Clustering,Gridding with Confidence)', 'medD'}; %HoC (RGB Clustering,Grid2) , HoC (RGB Clustering,Grid3), HoC (HSV),...
+params4.similarity_measure      = {'Bhattacharyya(Gridding with Confidence)'     , 'L1' };
+params4.feature_importance      = [ 1                                            , 1];
+params4.feature_normalizer      = [ 1                                            , 1];
 
 
-
-params4.occlusion_probability   = 0.3;
+params4.occlusion_probability   = 0.5;
 params4.occlusion_flag_threshold = 0.3;
+params4.state_transition_matrix = [0.1 0.9; 0.4 0.6]; % nocc->nocc = 0.99, nocc->occ = 0.01, occ->nocc = 0.25, occ->occ = 0.75
 params4.bkg_detection           = 'temporal median';
 params4.bkg_subtraction         = 'thresholding';
 params4.model_update            = 'moving_average';
 params4.enable_occ_flag         = true;
+params4.grid_size               = 2;
 
 tracker_parameters = {params1, params2, params3, params4};
 

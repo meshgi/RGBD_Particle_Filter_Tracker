@@ -13,21 +13,13 @@ for f = 1:size(features,2)
         case 'HoC(Uniform)'
             x.cell(1,1).feature(f).val    = histogram_of_colors   (bb_content(rgb_raw,bb), bb_content(rgb_msk,bb), features{f}.rgb_ctr );
             
-        case 'HoC (RGB Clustering,Grid2)'
-            g = 2;
+        case 'HoC(RGB Clustering,Gridding with Confidence)'
             for i = 1:g
                 for j = 1:g
                     cell_bb = bb_grid (bb,g,i,j);
                     x.cell(i,j).feature(f).val    = histogram_of_colors   (bb_content(rgb_raw,cell_bb), bb_content(rgb_msk,cell_bb), features{f}.rgb_ctr );
-                end
-            end
-            
-        case 'Grid Confidence (Beta)'
-            for i = 1:g
-                for j = 1:g
-                    cell_bb = bb_grid (bb,g,i,j);
-                    x.cell(i,j).fg_ratio    = box_confidence        (bb_content(rgb_msk,cell_bb));  
-                    x.cell(i,j).feature(f).val  = 1; %pdf(prior_dist(i,j),f.cell(i,j).fg_ratio);
+                    x.cell(i,j).fg_ratio          = box_confidence        (bb_content(rgb_msk,cell_bb));  
+                    x.cell(i,j).feature(f).coeff  = pdf(features{f}.rgb_cnf(i,j),x.cell(i,j).fg_ratio);
                 end
             end
             

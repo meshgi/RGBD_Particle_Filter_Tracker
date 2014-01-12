@@ -30,18 +30,16 @@ function x = bb_feature_distance ( x ,y , g, features )
             case 'Correlation'
 
 
-            case 'L2,Grid2'
-                % TO BE REVISED
+            case 'Bhattacharyya(Gridding with Confidence)'
                 x.dist(f) = 0;
-                g = 2;
                 for i = 1:g
                     for j = 1:g
-                        cell_bb = bb_grid (bb,g,i,j);
-                        
+
                         array1 = x.cell(i,j).feature(f).val;
                         array2 = y.cell(i,j).feature(f).val;
-                        d = sum((array1-array2).^2);
-                        x.dist(f) = x.dist(f) + d;
+                        d = dist_bhattacharyya ( array1 , array2 );
+                        c = x.cell(i,j).feature(f).coeff;
+                        x.dist(f) = x.dist(f) + c*d;
                     end
                 end
                 
